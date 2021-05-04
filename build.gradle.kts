@@ -91,5 +91,5 @@ tasks.register<Exec>("shell-completion") {
 }
 
 tasks.register("runOnGitHub") {
-    dependsOn("shell-completion", "install", "nativeTest")
+    dependsOn( "nativeTest", "linkDebugExecutableNative", "shell-completion")
 }

@@ -27,6 +27,7 @@ actual fun executeCommandAndCaptureOutput(
 
     val status = pclose(fp)
     if (status != 0 && options.abortOnError) {
+        println(stdout)
         throw Exception("Command `$command` failed with status $status${if (options.redirectStderr) ": $stdout" else ""}")
     }
 
