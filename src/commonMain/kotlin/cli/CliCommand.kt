@@ -91,7 +91,8 @@ class CliCommand : CliktCommand(
         val color = "always" // ???
         val author = authorName()
         val gitPrettyDate = if (`author-date`) "%ad" else "%cd"
-        val gitPrettyFormat = "%Cred%h%Creset - %s %Cgreen($gitPrettyDate) %C(bold blue)<%an>%Creset"
+        var gitPrettyFormat = "%Cred%h%Creset - %s %Cgreen($gitPrettyDate) %C(bold blue)<%an>%Creset"
+        if (`gpg-signed`) gitPrettyFormat += " %C(yellow)gpg: %G?%Creset"
 
         val until = when {
             daysUntil != 0 -> "--until='${daysUntil} days ago'"
@@ -108,7 +109,7 @@ class CliCommand : CliktCommand(
         args += "--author=$author"
         args += "--abbrev-commit"
         args += "--oneline"
-        args += "--pretty-format=$gitPrettyFormat"
+        args += "--pretty=format:$gitPrettyFormat"
         args += "--date=$gitDateFormat"
         args += "--color=$color"
         if (`diff-stat` != null) args += ("--stat")
