@@ -1,20 +1,25 @@
+You should use your favorite language to script and automate all the things.
+
+We are in the XXIth century now, and it's time to retire Bash programming.
+
+There are only two good kind of Bash scripts:
+- the ones that are five lines long or less
+- the ones that are written and maintained by others
+
+This repo is two things:
+
+- a reimplementation in Kotlin Multi-platform of a real world CLI tool: [git-standup](https://github.com/kamranahmedse/git-standup)
+- a GitHub template to give you the inspiration to write your own command line tools in Kotlin and to get you started faster
+
+<img width="1210" alt="jmfayard_kotlin-cli-starter__Life_is_too_short_for_Bash_programming" src="https://user-images.githubusercontent.com/459464/117188554-765b3a80-addd-11eb-8ac6-8f1fbc01506e.png">
 
 ## Work in progress
 
-- [ ] Fix linking of curl
-- [ ] Explain why Bash is a terrible programming language
-- [ ] Simplify usage of zsh/bash/fish auto-completions
-- [ ] Publish the tool on homebrew
-- [ ] Add the few options not yet supported
-- [ ] Create a wiki and describe how to customize the tool
-- [ ] Describe what the repo contains in the README
-- [ ] Do pair programming to let people test the template
-- [ ] Fix tests on the JVM
-- [ ] Support Windows
+Look at the issues https://github.com/jmfayard/kotlin-cli-starter/issues
 
 ## Install
 
-You can install `git-standup` using one of the options listed below
+You can install using one of the options listed below
 
 | Source | Command |
 | --- | --- |
@@ -22,13 +27,38 @@ You can install `git-standup` using one of the options listed below
 | manual | Clone and run `./gradlew install` |
 | brew | TODO: `brew install kotlin-cli-starter` |
 
-## Usage
+## What the template contains
+
+The template
+
+- can be run both
+  - with Kotlin/Native via `$ ./gradlew install` and then `git-standup`
+  - on the JVM with `$ ./gradlew run`
+- has tests that can also be run both
+  - natively `$ ./gradlew nativeTest`
+  - on the JVM `$ ./gradlew desktopTest`
+- includes those libraries
+  - [kotlin.test](https://kotlinlang.org/api/latest/kotlin.test/) for multi-platform testing
+  - [CliKt](https://github.com/ajalt/clikt) which parses the command-line arguments in a typesafe way and automatically generates the help and Bash/Zsh/Fish auto-completion
+  - [ktor-client](https://ktor.io/docs/getting-started-ktor-client.html) to make HTTP calls
+  - [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) which provides Kotlin multiplatform / multi-format serialization
+  - [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
+  - [gradle refreshVersions](https://jmfayard.github.io/refreshVersions/) to simplify dependency management
+
+It also contains an API to work with Files and execute shell subcommands.
+
+<img width="1631" alt="kotlin-cli-starter_–_nativeMain_…_Files_kt__kotlin-cli-starter_nativeMain__and_GitHub_Desktop_and_kamranahmedse_git-standup__Recall_what_you_did_on_the_last_working_day__Psst__or_be_nosy_and_find_what_someone_else_in_your_team_did__-_" src="https://user-images.githubusercontent.com/459464/117189924-0baafe80-addf-11eb-84d9-c1e52f3f704d.png">
+  
+## The template reimplement `git-standup`
+
+The template reimplement [`git-standup`](https://github.com/kamranahmedse/git-standup) so that you can learn and find inspiration from a real world example.
 
 Simply run it in and it will give you the output from the last working day
 
 Open a directory having multiple repositories and run
 
 ```shell
+$ ./gradlew install
 $ git standup
 ```
 
@@ -81,5 +111,4 @@ Repositories will be searched in the current directory unless a file
 
 Examples: git-standup -a "John Doe" -w "MON-FRI" -m 3
 ```
-
 
