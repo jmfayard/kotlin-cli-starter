@@ -5,7 +5,7 @@ You can install `git-standup` using one of the options listed below
 
 | Source | Command |
 | --- | --- |
-| curl | `curl -L https://raw.githubusercontent.com/jmfayard/kotlin-cli-starter/master/installer.sh \| sudo sh` |
+| curl | `curl -L https://raw.githubusercontent.com/jmfayard/kotlin-cli-starter/main/installer.sh \| sudo sh` |
 | manual | Clone and run `./gradlew install` |
 | brew | TODO: `brew install kotlin-cli-starter` |
 
