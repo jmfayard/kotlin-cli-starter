@@ -1,11 +1,15 @@
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmCompilation
+
 plugins {
-    java
+    application
     kotlin("multiplatform")
     kotlin("plugin.serialization")
 }
 
 group = "cli"
 version = "1.0-SNAPSHOT"
+
 
 repositories {
     mavenCentral()
@@ -16,6 +20,9 @@ dependencies {
     testRuntimeOnly(Testing.junit.engine)
 }
 
+application {
+    mainClass.set("cli.MainKt")
+}
 
 kotlin {
     val hostOs = System.getProperty("os.name")
@@ -27,8 +34,8 @@ kotlin {
         else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
     }
 
-    jvm("desktop") {
-
+    val desktop = jvm("desktop") {
+        // cli.MainKt
     }
 
     nativeTarget.apply {
@@ -55,7 +62,7 @@ kotlin {
                 implementation(Kotlin.test.annotationsCommon)
             }
         }
-        val desktopMain by getting {
+        val desktopMain: KotlinSourceSet by getting {
             dependsOn(commonMain)
             dependencies {
                 implementation(Ktor.client.okHttp)
@@ -79,6 +86,16 @@ kotlin {
         }
 
     }
+    tasks.withType<JavaExec> {
+        // code to make run task in kotlin multiplatform work
+        val compilation = desktop.compilations.getByName<KotlinJvmCompilation>("main")
+
+        val classes = files(
+            compilation.runtimeDependencyFiles,
+            compilation.output.allOutputs
+        )
+        classpath(classes)
+    }
 }
 
 tasks.withType<Test> {
@@ -95,13 +112,6 @@ tasks.register<Copy>("install") {
     doLast {
         println("$ git-standup installed into $destDir")
     }
-}
-
-
-tasks.register<Exec>("shell-completion") {
-// TODO: copy to /usr/local/share/bash-completion/completions
-    val completeCommand = "ls -l"
-    commandLine = completeCommand.split(" ")
 }
 
 tasks.register("runOnGitHub") {
