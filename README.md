@@ -1,4 +1,15 @@
 
+## Work in progress
+
+- [ ] Fix linking of curl
+- [ ] Explain why Bash is a terrible programming language
+- [ ] Publish the tool on homebrew
+- [ ] Add the few options not yet supported
+- [ ] Create a wiki and describe how to customize the tool
+- [ ] Describe what the repo contains in the README
+- [ ] Do pair programming to let people test the template
+- [ ] Fix tests on the JVM
+
 ## Install
 
 You can install `git-standup` using one of the options listed below
