@@ -5,6 +5,7 @@ plugins {
     application
     kotlin("multiplatform")
     kotlin("plugin.serialization")
+    id("com.github.johnrengelman.shadow")
 }
 
 group = "cli"
@@ -22,6 +23,7 @@ dependencies {
 
 application {
     mainClass.set("cli.MainKt")
+//    mainClassName = "cli.MainKt"
 }
 
 kotlin {
@@ -95,6 +97,17 @@ kotlin {
             compilation.output.allOutputs
         )
         classpath(classes)
+    }
+    tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+        archiveBaseName.set(project.name)
+        archiveClassifier.set("")
+        archiveVersion.set("")
+
+        from(desktop.compilations.getByName("main").output)
+        configurations = mutableListOf(
+            desktop.compilations.getByName("main").compileDependencyFiles as Configuration,
+            desktop.compilations.getByName("main").runtimeDependencyFiles as Configuration
+        )
     }
 }
 
