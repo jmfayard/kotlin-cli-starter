@@ -1,5 +1,8 @@
 import cli.runGitStandup
+import kotlinx.coroutines.runBlocking
 
 fun main(args: Array<String>) {
-    runGitStandup(args)
+    runBlocking {
+        runGitStandup(args)
+    }
 }

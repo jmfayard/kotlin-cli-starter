@@ -1,6 +1,7 @@
 plugins {
     java
     kotlin("multiplatform")
+    kotlin("plugin.serialization")
 }
 
 group = "cli"
@@ -41,6 +42,11 @@ kotlin {
         val commonMain by getting  {
             dependencies {
                 implementation("com.github.ajalt.clikt:clikt:_")
+                implementation(Ktor.client.core)
+                implementation(Ktor.client.serialization)
+                implementation(KotlinX.serialization.core)
+                implementation(KotlinX.serialization.json)
+                implementation(KotlinX.coroutines.core)
             }
         }
         val commonTest by getting {
@@ -51,6 +57,10 @@ kotlin {
         }
         val desktopMain by getting {
             dependsOn(commonMain)
+            dependencies {
+                implementation(Ktor.client.okHttp)
+                implementation(Square.okHttp3.okHttp)
+            }
         }
         val desktopTest by getting {
             dependencies {
@@ -59,7 +69,9 @@ kotlin {
         }
         val nativeMain by getting {
             dependsOn(commonMain)
-
+            dependencies {
+                implementation(Ktor.client.curl)
+            }
         }
         val nativeTest by getting {
         }

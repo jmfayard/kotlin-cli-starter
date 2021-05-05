@@ -76,6 +76,7 @@ class CliCommand : CliktCommand(
         help = "Display the author date instead of the committer date"
     ).flag()
     val verbose by option(help = "verbose").flag(defaultForHelp = "disabled")
+    val quote by option(help = "GET via HTTP a random quote from Game of Thrones").flag()
 
     override fun run() {
         if (verbose) println(this)

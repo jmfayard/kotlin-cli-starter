@@ -35,3 +35,4 @@ actual fun executeCommandAndCaptureOutput(
 
 actual fun findExecutable(executable: String): String =
     executeCommandAndCaptureOutput(listOf("which", executable), ExecuteCommandOptions(".", true, false, true))
+

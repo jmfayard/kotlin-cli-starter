@@ -3,10 +3,7 @@ package cli
 import cli.CliConfig.CURRENT_GIT_USER
 import cli.CliConfig.FIND
 import cli.CliConfig.GIT
-import io.ExecuteCommandOptions
-import io.executeCommandAndCaptureOutput
-import io.fileIsReadable
-import io.findExecutable
+import io.*
 import kotlin.native.concurrent.ThreadLocal
 
 @ThreadLocal
@@ -16,9 +13,10 @@ object CliConfig {
     var GIT = "git"
     var FIND = "find"
     var CURRENT_GIT_USER = "me"
+    val API_URL = "https://got-quotes.herokuapp.com/quotes"
 }
 
-fun runGitStandup(args: Array<String>) {
+suspend fun runGitStandup(args: Array<String>) {
     val options = ExecuteCommandOptions(directory = ".", abortOnError = true, redirectStderr = true, trim = true)
     GIT = findExecutable(GIT)
     FIND = findExecutable(FIND)
@@ -31,6 +29,9 @@ fun runGitStandup(args: Array<String>) {
 
     if (command.help) {
         println(command.getFormattedHelp())
+        return
+    } else if (command.quote) {
+        fetchAndPrintRandomQuote()
         return
     }
     val gitRepositories =
@@ -46,6 +47,7 @@ fun runGitStandup(args: Array<String>) {
         findCommitsInRepo(repositoryPath, command)
     }
 }
+
 
 fun findCommitsInRepo(repositoryPath: String, command: CliCommand) {
     val options =
@@ -81,3 +83,4 @@ fun findCommitsInRepo(repositoryPath: String, command: CliCommand) {
         println("$ " + command.gitLogCommand())
     }
 }
+
