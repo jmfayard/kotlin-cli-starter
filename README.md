@@ -19,15 +19,16 @@ This repo is two things:
 
 Look at the issues https://github.com/jmfayard/kotlin-cli-starter/issues
 
-## Install
+## Try it out!
 
 You can install using one of the options listed below
 
 | Source | Command |
 | --- | --- |
 | curl | `curl -L https://raw.githubusercontent.com/jmfayard/kotlin-cli-starter/main/installer.sh \| sudo sh` |
-| Kotlin Native | Clone and run `./gradlew install` |
-| Kotlin JVM | Clone and run `./gradlew install` |
+| Kotlin Native | Clone, run `./gradlew install` then `$ git standup` |
+| Kotlin JVM | Clone and run `./gradlew run` |
+| Tests | `./gradlew allTests` |
 
 ## What the template contains
 
@@ -113,4 +114,3 @@ Repositories will be searched in the current directory unless a file
 
 Examples: git-standup -a "John Doe" -w "MON-FRI" -m 3
 ```
-
