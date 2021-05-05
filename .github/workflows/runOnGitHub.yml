@@ -22,6 +22,11 @@ jobs:
         with:
           java-version: 8
 
+      - name: install dependencies ubuntu
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          sudo apt install libcurl4-openssl-dev
+
       # Execute Gradle commands in GitHub Actions workflows
       # => https://github.com/marketplace/actions/gradle-command
       - id: gradle
