@@ -17,6 +17,8 @@ This repo is two things:
 
 ## Work in progress
 
+We want to support Windows, publish on Homebrew and simplify support of shell completion. 
+
 Look at the issues https://github.com/jmfayard/kotlin-cli-starter/issues
 
 ## Try it out!
