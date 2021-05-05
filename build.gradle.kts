@@ -64,7 +64,9 @@ kotlin {
         }
         val desktopTest by getting {
             dependencies {
-
+                implementation(Testing.junit.api)
+                implementation(Testing.junit.engine)
+                implementation(Kotlin.test.junit5)
             }
         }
         val nativeMain by getting {
@@ -79,7 +81,7 @@ kotlin {
     }
 }
 
-tasks.getByName<Test>("test") {
+tasks.withType<Test> {
     useJUnitPlatform()
 }
 
@@ -103,5 +105,5 @@ tasks.register<Exec>("shell-completion") {
 }
 
 tasks.register("runOnGitHub") {
-    dependsOn( "nativeTest", "linkDebugExecutableNative", "shell-completion")
+    dependsOn( "allTests", "linkDebugExecutableNative", "shell-completion")
 }

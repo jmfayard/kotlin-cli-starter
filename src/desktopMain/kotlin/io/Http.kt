@@ -1,3 +1,4 @@
+@file:JvmName("HttpClientBuilder")
 package io
 
 import io.ktor.client.*

@@ -3,12 +3,14 @@
 
 - [ ] Fix linking of curl
 - [ ] Explain why Bash is a terrible programming language
+- [ ] Simplify usage of zsh/bash/fish auto-completions
 - [ ] Publish the tool on homebrew
 - [ ] Add the few options not yet supported
 - [ ] Create a wiki and describe how to customize the tool
 - [ ] Describe what the repo contains in the README
 - [ ] Do pair programming to let people test the template
 - [ ] Fix tests on the JVM
+- [ ] Support Windows
 
 ## Install
 
