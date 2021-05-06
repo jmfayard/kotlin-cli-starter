@@ -128,5 +128,5 @@ tasks.register<Copy>("install") {
 }
 
 tasks.register("runOnGitHub") {
-    dependsOn( "allTests", "linkDebugExecutableNative", "shell-completion")
+    dependsOn( "allTests", "linkDebugExecutableNative")
 }
