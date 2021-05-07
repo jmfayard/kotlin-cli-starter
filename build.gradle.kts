@@ -134,5 +134,5 @@ tasks.register<Copy>("install") {
 tasks.register("runOnGitHub") {
     group = "run"
     description = "CI with Github Actions : .github/workflows/runOnGitHub.yml"
-    dependsOn( "allTests", "linkDebugExecutableNative")
+    dependsOn( "allTests", "linkDebugExecutableNative", "run")
 }
