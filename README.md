@@ -20,15 +20,20 @@ You can install using one of the options listed below
 | Kotlin JVM | Clone and run `./gradlew run` |
 | Tests | `./gradlew allTests` |
 
-## Why
+## Why?
 
-My strong opinion - weakly held - is that modern programming language are an order of magnitude better than Bash.
+Being able to write your own command-line tools is a great skill to have. Automate all the things!
 
-Therefore you should use Kotlin - or your favorite language - to script and automate all the things.
+You can write the CLI tools in Kotlin and reap the benefits of using
+- a modern programming language
+- modern IDE support
+- modern practices such as unit testing and continuous integration
+- leverage Kotlin multiplatform libraries
+- run your code on the JVM and benefit from a wealth of Java libraries
+- or build a native executable, which starts very fast and can be deployed on a computer without the JVM
 
-Not Bash.
+My strong opinion - weakly held - is that there are only two good kind of Bash scripts:
 
-There are only two good kind of Bash scripts:
 - the ones that are five lines long or less
 - the ones that are written and maintained by others
 
