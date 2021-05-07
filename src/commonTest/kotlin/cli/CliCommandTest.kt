@@ -4,6 +4,10 @@ import io.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+/***
+ * CUSTOMIZE_ME: the tests are specific to git-standup and can be deleted once understood
+ * Write your own unit tests!
+ */
 class CliCommandTest {
     private fun assertLogCommand(args: String, expected:String) {
         fun String.simplify() =

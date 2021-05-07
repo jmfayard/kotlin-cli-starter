@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+## CUSTOMIZE_ME: use your own GitHub username and repository here
 USER=jmfayard
 REPO=kotlin-cli-starter
 ## Clone the repo

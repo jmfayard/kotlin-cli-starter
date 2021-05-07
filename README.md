@@ -1,27 +1,15 @@
-You should use Kotlin - or your favorite language - to script and automate all the things.
+<!-- 
+CUSTOMIZE ME : delete alll the README except the paragraph "Installation"
+In the paragraph installation, make sure to customize the URL of installer.sh
+-->
 
-Not Bash.
+A starter project to build command-line tools in Kotlin Multiplatform
 
-Modern programming language are an order of magnitude better than Bash.
-
-There are only two good kind of Bash scripts:
-- the ones that are five lines long or less
-- the ones that are written and maintained by others
-
-This repo is two things:
-
-- a reimplementation in Kotlin Multi-platform of a real world CLI tool: [git-standup](https://github.com/kamranahmedse/git-standup)
-- a GitHub template to give you the inspiration to write your own command line tools in Kotlin and to get you started faster
+Contains a re-implementation of a real world CLI tool: [git-standup](https://github.com/kamranahmedse/git-standup)
 
 <img width="1214" alt="jmfayard_kotlin-cli-starter__Life_is_too_short_for_Bash_programming_and_Telegram_and_GitHub_Desktop" src="https://user-images.githubusercontent.com/459464/117193054-b40e9200-ade2-11eb-86a8-ad65a45a82da.png">
 
-## Work in progress
-
-We want to support Windows, publish on Homebrew and simplify support of shell completion. 
-
-Look at the issues https://github.com/jmfayard/kotlin-cli-starter/issues
-
-## Try it out!
+## Installation
 
 You can install using one of the options listed below
 
@@ -31,6 +19,25 @@ You can install using one of the options listed below
 | Kotlin Native | Clone, run `./gradlew install` then `$ git standup` |
 | Kotlin JVM | Clone and run `./gradlew run` |
 | Tests | `./gradlew allTests` |
+
+## Why
+
+My strong opinion - weakly held - is that modern programming language are an order of magnitude better than Bash.
+
+Therefore you should use Kotlin - or your favorite language - to script and automate all the things.
+
+Not Bash.
+
+There are only two good kind of Bash scripts:
+- the ones that are five lines long or less
+- the ones that are written and maintained by others
+
+## Work in progress
+
+We want to support Windows, publish on Homebrew and simplify support of shell completion. 
+
+Look at the issues https://github.com/jmfayard/kotlin-cli-starter/issues
+
 
 ## What the template contains
 
@@ -50,13 +57,14 @@ The template
   - [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) which provides Kotlin multiplatform / multi-format serialization
   - [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
   - [gradle refreshVersions](https://jmfayard.github.io/refreshVersions/) to simplify dependency management
+- contains a work-around of the [missing `runBlocking { ... }` in commonTests](https://github.com/jmfayard/kotlin-cli-starter/issues/9)
 - contains an API to work with Files and execute shell subcommands.
 
 <img width="1631" alt="kotlin-cli-starter_–_nativeMain_…_Files_kt__kotlin-cli-starter_nativeMain__and_GitHub_Desktop_and_kamranahmedse_git-standup__Recall_what_you_did_on_the_last_working_day__Psst__or_be_nosy_and_find_what_someone_else_in_your_team_did__-_" src="https://user-images.githubusercontent.com/459464/117189924-0baafe80-addf-11eb-84d9-c1e52f3f704d.png">
   
 ## The template reimplements `git-standup`
 
-The template reimplement [`git-standup`](https://github.com/kamranahmedse/git-standup) so that you can learn and find inspiration from a real world example.
+The template reimplements [`git-standup`](https://github.com/kamranahmedse/git-standup) so that you can learn and find inspiration from a real world example.
 
 Simply run it in and it will give you the output from the last working day
 
@@ -71,7 +79,10 @@ $ git standup
 
 This will show you all your commits since the last working day in all the repositories inside.
 
-Options:
+There is auto-completion to see the options
+
+<img width="1033" alt="jmfayard_jmfayard____Downloads_and_kotlin-cli-starter_–_README_md__kotlin-cli-starter__and_README_·_Issue__7_·_jmfayard_kotlin-cli-starter" src="https://user-images.githubusercontent.com/459464/117405520-11eac900-af0c-11eb-85e9-8c6292d3b246.png">
+
 
 ```shell
 git standup --help
@@ -86,33 +97,33 @@ Options:
   -b, --branch TEXT                Specify branch to restrict search to
                                    (unset: all branches, "$remote/$branch" to
                                    include fetches)
-  -w, --week-day TEXT              Specify weekday range to limit search to
-  -m, --depth INT                  Specify the depth of recursive directory
-                                   search
-  -F, --force-recursion TEXT       Force recursion up to speficied depth
-  -L, --symbolic-links             Toggle inclusion of symbolic links in
-                                   recursive directory search
-  -d, --days INT                   Specify the number of days back to include
-  -u, --until INT                  Specify the number of days back until this
-                                   day
-  -D, --date-format TEXT           Specify the number of days back until this
-                                   day
-  -h, --help                       Display this help screen
-  -g, --gpg-signed / disabled      Show if commit is GPG signed (G) or not (N)
-  -f, --fetch / --no-fetch         Fetch the latest commits beforehand
-  -s, --silence                    Silences the no activity message (useful
-                                   when running in a directory having many
-                                   repositories)
-  -r, --report                     Generate a file with the report
-  -c, --diff-stat TEXT             Show diffstat for every matched commit
-  -A, --after TEXT                 List commits after this date
-  -B, --before TEXT                List commits before this date
-  -R, --author-date                Display the author date instead of the
-                                   committer date
-  --verbose                        verbose
-
-Repositories will be searched in the current directory unless a file
-`.git-standup-whitelist` is found that contains repository paths.
+  [... and much more options....]
 
 Examples: git-standup -a "John Doe" -w "MON-FRI" -m 3
 ```
+
+## CUSTOMIZE_ME
+
+So are you ready to write your own command-line tool?
+
+Have you an idea of what you want to write yet?
+
+You can find some inspiration in [15 Command Line Tools which Spark Joy in Your Terminal ](https://dev.to/jmfayard/15-command-line-tools-which-spark-joy-in-your-terminal-45ln)
+
+Then click on [Use this GitHub template](https://github.com/jmfayard/kotlin-cli-starter/generate)
+
+<img width="1214"  src="https://user-images.githubusercontent.com/459464/117193054-b40e9200-ade2-11eb-86a8-ad65a45a82da.png">
+
+There are comments starting with [**CUSTOMIZE_ME**](https://github.com/jmfayard/kotlin-cli-starter/search?q=CUSTOMIZE_ME) in all places you need to customize
+
+Find them with `Edit > File > Find in Files`
+
+<img width="998" src="https://user-images.githubusercontent.com/459464/117405450-f253a080-af0b-11eb-882c-7bae969bc7e2.png">
+
+## Built with kotlin-cli-starter
+
+- [git-standup](https://github.com/jmfayard/kotlin-cli-starter)
+- [httpie.kt](https://github.com/raychenon/httpie.kt)
+- ...
+
+_Have you used the template to build something? Please advertise it here_ 🙏🏻 

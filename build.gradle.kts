@@ -10,6 +10,8 @@ plugins {
 group = "cli"
 version = "1.0-SNAPSHOT"
 
+// CUSTOMIZE_ME: the name of your command-line tool goes here
+val PROGRAM = "http"
 
 repositories {
     mavenCentral()
@@ -103,17 +105,21 @@ tasks.withType<Test> {
 }
 
 tasks.register<Copy>("install") {
+    group = "run"
+    description = "Build the native executable and install it"
     val destDir = "/usr/local/bin"
     dependsOn("runDebugExecutableNative")
     from("build/bin/native/debugExecutable") {
-        rename { "git-standup" }
+        rename { PROGRAM }
     }
     into(destDir)
     doLast {
-        println("$ git-standup installed into $destDir")
+        println("$ $PROGRAM installed into $destDir")
     }
 }
 
 tasks.register("runOnGitHub") {
+    group = "run"
+    description = "CI with Github Actions : .github/workflows/runOnGitHub.yml"
     dependsOn( "allTests", "linkDebugExecutableNative")
 }

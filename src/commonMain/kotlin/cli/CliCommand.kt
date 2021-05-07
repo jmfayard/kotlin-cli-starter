@@ -17,6 +17,8 @@ import io.readAllText
 /**
  * CliKt provides Kotlin Multiplatform command line interface parsing for Kotlin
  * https://ajalt.github.io/clikt/
+ *
+ * CUSTOMIZE_ME: define your own help messages and arguments here
  */
 class CliCommand : CliktCommand(
     help = """

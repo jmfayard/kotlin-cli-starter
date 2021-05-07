@@ -8,6 +8,9 @@ import io.ktor.client.request.*
 import io.ktor.utils.io.core.*
 import kotlinx.serialization.Serializable
 
+/***
+ * CUSTOMIZE_ME: this file is all specific to git-standup and can be deleted once understood
+ */
 suspend fun runGitStandup(args: Array<String>) {
     val options = ExecuteCommandOptions(directory = ".", abortOnError = true, redirectStderr = true, trim = true)
     GIT = findExecutable(GIT)
