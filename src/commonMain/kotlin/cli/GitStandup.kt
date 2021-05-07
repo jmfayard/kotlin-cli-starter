@@ -23,7 +23,9 @@ suspend fun runGitStandup(args: Array<String>) {
         println(command.getFormattedHelp())
         return
     } else if (command.quote) {
-        fetchAndPrintRandomQuote()
+        val quote = fetchAndPrintRandomQuote()
+        println("> ${quote.quote}")
+        println("-- ${quote.character}")
         return
     }
     val gitRepositories =
@@ -81,13 +83,11 @@ fun findCommitsInRepo(repositoryPath: String, command: CliCommand) {
  * Networking can be done in Kotlin Native with Ktor-Client
  * https://ktor.io/docs/getting-started-ktor-client.html
  * */
-suspend fun fetchAndPrintRandomQuote() {
+suspend fun fetchAndPrintRandomQuote(): GameOfThroneQuote {
     buildHttpClient().use { client ->
-        val quote = client.get<GameOfThroneQuote>(CliConfig.API_URL) {
+        return client.get(CliConfig.API_URL) {
 
         }
-        println("> ${quote.quote}")
-        println("-- ${quote.character}")
     }
 }
 

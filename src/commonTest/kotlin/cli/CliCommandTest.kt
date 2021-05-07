@@ -1,5 +1,6 @@
 package cli
 
+import io.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -13,6 +14,10 @@ class CliCommandTest {
         assertEquals(expected.simplify(), actual, "Invalid git log for args='$args'")
     }
 
+    @Test
+    fun `it should be possible to do a network call with ktor-client`() = runTest {
+        println(fetchAndPrintRandomQuote())
+    }
 
     @Test
     fun `git log with no arguments`() {
