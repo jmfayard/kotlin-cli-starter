@@ -37,3 +37,7 @@ data class ExecuteCommandOptions(
 
 // call $ which $executable on the JVM
 expect fun findExecutable(executable: String): String
+
+// runBlocking doens't exist on JavaScript therefore in common multiplatform code
+// https://github.com/jmfayard/kotlin-cli-starter/issues/9
+expect fun runTest(block: suspend () -> Unit): Unit

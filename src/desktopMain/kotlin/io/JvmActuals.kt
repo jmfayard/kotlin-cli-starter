@@ -3,6 +3,7 @@ package io
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.*
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import java.io.File
 
@@ -52,3 +53,5 @@ actual fun buildHttpClient(): HttpClient {
     }
 }
 
+actual fun runTest(block: suspend () -> Unit): Unit =
+    runBlocking { block() }

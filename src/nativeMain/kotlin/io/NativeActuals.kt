@@ -5,6 +5,7 @@ import io.ktor.client.engine.curl.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import kotlinx.cinterop.*
+import kotlinx.coroutines.runBlocking
 import platform.posix.*
 
 /**
@@ -106,3 +107,5 @@ actual fun executeCommandAndCaptureOutput(
     return if (options.trim) stdout.trim() else stdout
 }
 
+actual fun runTest(block: suspend () -> Unit) =
+    runBlocking { block() }
