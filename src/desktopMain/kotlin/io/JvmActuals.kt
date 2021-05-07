@@ -1,5 +1,9 @@
 package io
 
+import io.ktor.client.*
+import io.ktor.client.engine.okhttp.*
+import io.ktor.client.features.json.*
+import okhttp3.OkHttpClient
 import java.io.File
 
 
@@ -35,4 +39,16 @@ actual fun executeCommandAndCaptureOutput(
 
 actual fun findExecutable(executable: String): String =
     executeCommandAndCaptureOutput(listOf("which", executable), ExecuteCommandOptions(".", true, false, true))
+
+actual fun buildHttpClient(): HttpClient {
+    val okHttpClient = OkHttpClient.Builder().build()
+    return HttpClient(OkHttp) {
+        install(JsonFeature) {
+            serializer = defaultSerializer()
+        }
+        engine {
+            preconfigured = okHttpClient
+        }
+    }
+}
 

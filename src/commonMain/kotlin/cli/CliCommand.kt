@@ -14,6 +14,10 @@ import com.github.ajalt.clikt.parameters.types.int
 import io.fileIsReadable
 import io.readAllText
 
+/**
+ * CliKt provides Kotlin Multiplatform command line interface parsing for Kotlin
+ * https://ajalt.github.io/clikt/
+ */
 class CliCommand : CliktCommand(
     help = """
        Recall what you did on the last working day ..or be nosy and find what someone else did.
