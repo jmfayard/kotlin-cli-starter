@@ -17,3 +17,7 @@ package:
     dist/git-standup --generate-completion bash > dist/git-standup.kt.bash
     dist/git-standup --generate-completion zsh > dist/git-standup.kt.zsh
     dist/git-standup --generate-completion fish > dist/git-standup.kt.fish
+brew:
+    brew reinstall --debug --verbose --build-from-source git-standup.kt
+    brew test git-standup.kt
+    brew audit --strict git-standup.kt
