@@ -12,12 +12,11 @@ prs:
 urls: github issues prs
     echo "URLs opened"
 package:
-    ./gradlew linkReleaseExecutableNative
-    cp build/bin/native/releaseExecutable/kotlin-cli-starter.kexe dist/git-standup
-    dist/git-standup --generate-completion bash > dist/git-standup.kt.bash
-    dist/git-standup --generate-completion zsh > dist/git-standup.kt.zsh
-    dist/git-standup --generate-completion fish > dist/git-standup.kt.fish
+    ./gradlew install
+    git-standup --generate-completion bash > completions/git-standup.kt.bash
+    git-standup --generate-completion zsh  > completions/git-standup.kt.zsh
+    git-standup --generate-completion fish > completions/git-standup.kt.fish
 brew:
-    brew reinstall --debug --verbose --build-from-source git-standup.kt
-    brew test git-standup.kt
-    brew audit --strict git-standup.kt
+    brew reinstall --debug --verbose --build-from-source git-standup-kotlin
+    brew test git-standup-kotlin 
+    brew audit --strict git-standup-kotlin
