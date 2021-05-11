@@ -11,8 +11,9 @@ prs:
     open https://github.com/jmfayard/kotlin-cli-starter/pulls
 urls: github issues prs
     echo "URLs opened"
-package:
+install:
     ./gradlew install
+completions: install
     git-standup --generate-completion bash > completions/git-standup.kt.bash
     git-standup --generate-completion zsh  > completions/git-standup.kt.zsh
     git-standup --generate-completion fish > completions/git-standup.kt.fish
