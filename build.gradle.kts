@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmCompilation
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
@@ -58,6 +59,7 @@ kotlin {
                 implementation(KotlinX.serialization.core)
                 implementation(KotlinX.serialization.json)
                 implementation(KotlinX.coroutines.core)
+                implementation("com.squareup.okio:okio-multiplatform:_")
             }
         }
         val commonTest by getting {
@@ -89,7 +91,13 @@ kotlin {
         val nativeTest by getting {
         }
 
+        sourceSets {
+            all {
+                languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+            }
+        }
     }
+
     tasks.withType<JavaExec> {
         // code to make run task in kotlin multiplatform work
         val compilation = desktop.compilations.getByName<KotlinJvmCompilation>("main")
@@ -111,6 +119,10 @@ kotlin {
             desktop.compilations.getByName("main").runtimeDependencyFiles as Configuration
         )
     }
+}
+
+tasks.withType<KotlinCompile>() {
+    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 }
 
 tasks.withType<Test> {

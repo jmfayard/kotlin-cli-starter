@@ -5,21 +5,12 @@ import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.*
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
+import okio.ExperimentalFileSystem
+import okio.FileSystem
 import java.io.File
 
-
-actual fun readAllText(filePath: String): String =
-    File(filePath).readText()
-
-actual fun writeAllText(filePath: String, text: String) {
-    File(filePath).writeText(text)
-}
-
-actual fun writeAllLines(filePath: String, lines: List<String>) =
-    File(filePath).writeText(lines.joinToString(separator = "\n"))
-
-actual fun fileIsReadable(filePath: String): Boolean =
-    File(filePath).canRead()
+@OptIn(ExperimentalFileSystem::class)
+actual val fileSystem: FileSystem = FileSystem.SYSTEM
 
 actual fun executeCommandAndCaptureOutput(
     command: List<String>,

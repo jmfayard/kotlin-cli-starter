@@ -1,6 +1,10 @@
+@file:OptIn(ExperimentalFileSystem::class)
 package io
 
 import io.ktor.client.*
+import okio.ExperimentalFileSystem
+import okio.FileSystem
+import okio.Path.Companion.toPath
 
 /***
  * If you need to access platform-specific APIs from the shared code,
@@ -9,19 +13,27 @@ import io.ktor.client.*
  * https://kotlinlang.org/docs/mpp-connect-to-apis.html
  */
 
-
 expect fun buildHttpClient(): HttpClient
 
-expect fun readAllText(filePath: String): String
+expect val fileSystem: FileSystem
 
-expect fun writeAllText(filePath: String, text: String)
+fun readAllText(filePath: String): String =
+    fileSystem.read(filePath.toPath()) {
+        readUtf8()
+    }
 
-expect fun writeAllLines(
+fun writeAllText(filePath: String, text: String): Unit =
+    fileSystem.write(filePath.toPath()) {
+        writeUtf8(text)
+    }
+
+fun writeAllLines(
     filePath: String,
     lines: List<String>
-)
+) = writeAllText(filePath, lines.joinToString(separator = "\n"))
 
-expect fun fileIsReadable(filePath: String): Boolean
+fun fileIsReadable(filePath: String): Boolean =
+    fileSystem.exists(filePath.toPath())
 
 expect fun executeCommandAndCaptureOutput(
     command: List<String>,
