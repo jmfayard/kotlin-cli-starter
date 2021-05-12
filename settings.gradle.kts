@@ -1,16 +1,7 @@
-import de.fayard.refreshVersions.bootstrapRefreshVersions
-
-buildscript {
-    repositories { gradlePluginPortal() }
-    dependencies.classpath("de.fayard.refreshVersions:refreshVersions:0.9.7")
-}
-
-
 plugins {
-    id("com.gradle.enterprise") version "3.4.1"
+    id("com.gradle.enterprise") version "3.6.1"
+    id("de.fayard.refreshVersions") version "0.10.0"
 }
-
-bootstrapRefreshVersions()
 
 // https://dev.to/jmfayard/the-one-gradle-trick-that-supersedes-all-the-others-5bpg
 gradleEnterprise {
