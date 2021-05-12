@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJsCompilation
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmCompilation
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -41,6 +42,11 @@ kotlin {
 
     val desktop = jvm("desktop") {
         // cli.MainKt
+    }
+
+    val node = js {
+        nodejs()
+        binaries.executable()
     }
 
     nativeTarget.apply {
@@ -89,6 +95,15 @@ kotlin {
             }
         }
         val nativeTest by getting {
+
+        }
+        val jsMain by getting {
+            dependencies {
+                implementation("com.squareup.okio:okio-nodefilesystem-js:_")
+            }
+        }
+        val jsTest by getting {
+
         }
 
         sourceSets {
