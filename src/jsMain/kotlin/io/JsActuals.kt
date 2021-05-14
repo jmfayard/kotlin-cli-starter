@@ -1,10 +1,6 @@
 @file:OptIn(ExperimentalFileSystem::class)
 package io
 
-import io.ktor.client.*
-import io.ktor.client.engine.js.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import okio.ExperimentalFileSystem
@@ -16,14 +12,6 @@ actual val fileSystem: FileSystem = NodeJsFileSystem
 
 actual fun findExecutable(executable: String): String =
     executable
-
-
-actual fun buildHttpClient(): HttpClient =
-    HttpClient(Js) {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer()
-        }
-    }
 
 
 /**

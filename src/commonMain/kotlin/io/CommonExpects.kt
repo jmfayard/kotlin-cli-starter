@@ -1,7 +1,6 @@
 @file:OptIn(ExperimentalFileSystem::class)
 package io
 
-import io.ktor.client.*
 import okio.ExperimentalFileSystem
 import okio.FileSystem
 import okio.Path.Companion.toPath
@@ -12,8 +11,6 @@ import okio.Path.Companion.toPath
  *
  * https://kotlinlang.org/docs/mpp-connect-to-apis.html
  */
-
-expect fun buildHttpClient(): HttpClient
 
 expect val fileSystem: FileSystem
 

@@ -27,7 +27,6 @@ dependencies {
 
 application {
     mainClass.set("cli.MainKt")
-//    mainClassName = "cli.MainKt"
 }
 
 kotlin {
@@ -37,14 +36,14 @@ kotlin {
         hostOs == "Mac OS X" -> macosX64("native")
         hostOs == "Linux" -> linuxX64("native")
         isMingwX64 -> mingwX64("native")
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+        else -> throw GradleException("Host $hostOs is not supported in Kotlin/Native.")
     }
 
     val desktop = jvm("desktop") {
         // cli.MainKt
     }
 
-    val node = js {
+    val node = js(LEGACY) {
         nodejs()
         binaries.executable()
     }
@@ -57,15 +56,20 @@ kotlin {
         }
     }
     sourceSets {
+        all {
+            languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+        }
+
         val commonMain by getting  {
             dependencies {
                 implementation("com.github.ajalt.clikt:clikt:_")
-                implementation(Ktor.client.core)
-                implementation(Ktor.client.serialization)
+                implementation("com.squareup.okio:okio-multiplatform:_")
+                implementation(KotlinX.coroutines.core)
+
+                /// implementation(Ktor.client.core)
+                /// implementation(Ktor.client.serialization)
                 implementation(KotlinX.serialization.core)
                 implementation(KotlinX.serialization.json)
-                implementation(KotlinX.coroutines.core)
-                implementation("com.squareup.okio:okio-multiplatform:_")
             }
         }
         val commonTest by getting {
@@ -78,7 +82,7 @@ kotlin {
             dependsOn(commonMain)
             dependencies {
                 implementation(Ktor.client.okHttp)
-                implementation(Square.okHttp3.okHttp)
+                /// implementation(Square.okHttp3.okHttp)
             }
         }
         val desktopTest by getting {
@@ -91,7 +95,7 @@ kotlin {
         val nativeMain by getting {
             dependsOn(commonMain)
             dependencies {
-                implementation(Ktor.client.curl)
+                /// implementation(Ktor.client.curl)
             }
         }
         val nativeTest by getting {
@@ -134,10 +138,6 @@ kotlin {
             desktop.compilations.getByName("main").runtimeDependencyFiles as Configuration
         )
     }
-}
-
-tasks.withType<KotlinCompile>() {
-    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
 }
 
 tasks.withType<Test> {

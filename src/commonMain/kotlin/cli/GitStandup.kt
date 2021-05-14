@@ -4,8 +4,6 @@ import cli.CliConfig.CURRENT_GIT_USER
 import cli.CliConfig.FIND
 import cli.CliConfig.GIT
 import io.*
-import io.ktor.client.request.*
-import io.ktor.utils.io.core.*
 import kotlinx.serialization.Serializable
 
 /***
@@ -25,12 +23,8 @@ suspend fun runGitStandup(args: Array<String>) {
     if (command.help) {
         println(command.getFormattedHelp())
         return
-    } else if (command.quote) {
-        val quote = fetchAndPrintRandomQuote()
-        println("> ${quote.quote}")
-        println("-- ${quote.character}")
-        return
     }
+
     val gitRepositories =
         executeCommandAndCaptureOutput(
             command.findCommand(),
@@ -80,26 +74,3 @@ fun findCommitsInRepo(repositoryPath: String, command: CliCommand) {
         println("$ " + command.gitLogCommand())
     }
 }
-
-
-/**
- * Networking can be done in Kotlin Native with Ktor-Client
- * https://ktor.io/docs/getting-started-ktor-client.html
- * */
-suspend fun fetchAndPrintRandomQuote(): GameOfThroneQuote {
-    buildHttpClient().use { client ->
-        return client.get(CliConfig.API_URL) {
-
-        }
-    }
-}
-
-/**
- * Serialization can be done in Kotlin Native with KotlinX Serialization
- * https://github.com/Kotlin/kotlinx.serialization
- * */
-@Serializable
-data class GameOfThroneQuote(
-    val quote: String,
-    val character: String,
-)
