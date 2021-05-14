@@ -66,8 +66,8 @@ class CliCommand : CliktCommand(
         "--gpg-signed",
         help = "Show if commit is GPG signed (G) or not (N)"
     ).flag("disabled")
-    val `fetch` by option("-f", "--fetch", help = "Fetch the latest commits beforehand").flag("--no-fetch")
-    val `silence` by option(
+    val fetch by option("-f", "--fetch", help = "Fetch the latest commits beforehand").flag("--no-fetch")
+    val silence by option(
         "-s",
         "--silence",
         help = "Silences the no activity message (useful when running in a directory having many repositories)"
@@ -81,7 +81,7 @@ class CliCommand : CliktCommand(
         "--author-date",
         help = "Display the author date instead of the committer date"
     ).flag()
-    val verbose by option(help = "verbose").flag(defaultForHelp = "disabled")
+    val verbose by option("-v", "--verbose", help = "verbose").flag(defaultForHelp = "disabled")
 
     override fun run() {
         if (verbose) println(this)

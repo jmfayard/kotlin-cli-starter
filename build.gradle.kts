@@ -18,6 +18,7 @@ val PROGRAM = "http"
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -26,7 +27,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("cli.MainKt")
+    mainClass.set("cli.JvmMainKt")
 }
 
 kotlin {
@@ -104,10 +105,13 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation("com.squareup.okio:okio-nodefilesystem-js:_")
+                implementation(KotlinX.nodeJs)
             }
         }
         val jsTest by getting {
-
+            dependencies {
+                implementation(Kotlin.test.jsRunner)
+            }
         }
 
         sourceSets {
@@ -161,5 +165,5 @@ tasks.register<Copy>("install") {
 tasks.register("runOnGitHub") {
     group = "run"
     description = "CI with Github Actions : .github/workflows/runOnGitHub.yml"
-    dependsOn( "allTests", "linkDebugExecutableNative", "run")
+    dependsOn( "nativeTest", "desktopTest", "linkDebugExecutableNative", "run")
 }

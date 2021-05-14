@@ -3,6 +3,8 @@
 run:
     ./gradlew allTests run install
     cd .. && git-standup
+ci:
+    ./gradlew runOnGitHub
 github:
     open https://github.com/jmfayard/kotlin-cli-starter/
 issues:
@@ -19,5 +21,5 @@ completions: install
     git-standup --generate-completion fish > completions/git-standup.kt.fish
 brew:
     brew reinstall --debug --verbose --build-from-source git-standup-kotlin
-    brew test git-standup-kotlin 
+    brew test git-standup-kotlin
     brew audit --strict git-standup-kotlin
