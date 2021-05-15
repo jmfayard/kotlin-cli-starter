@@ -32,7 +32,7 @@ fun writeAllLines(
 fun fileIsReadable(filePath: String): Boolean =
     fileSystem.exists(filePath.toPath())
 
-expect fun executeCommandAndCaptureOutput(
+expect suspend fun executeCommandAndCaptureOutput(
     command: List<String>,
     options: ExecuteCommandOptions
 ): String
@@ -45,7 +45,7 @@ data class ExecuteCommandOptions(
 )
 
 // call $ which $executable on the JVM
-expect fun findExecutable(executable: String): String
+expect suspend fun findExecutable(executable: String): String
 
 // runBlocking doens't exist on JavaScript therefore in common multiplatform code
 // https://github.com/jmfayard/kotlin-cli-starter/issues/9

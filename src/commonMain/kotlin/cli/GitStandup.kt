@@ -40,7 +40,7 @@ suspend fun runGitStandup(args: Array<String>) {
 }
 
 
-fun findCommitsInRepo(repositoryPath: String, command: CliCommand) {
+suspend fun findCommitsInRepo(repositoryPath: String, command: CliCommand) {
     val options =
         ExecuteCommandOptions(directory = repositoryPath, abortOnError = true, redirectStderr = true, trim = true)
 

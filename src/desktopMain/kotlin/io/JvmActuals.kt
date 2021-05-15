@@ -8,7 +8,7 @@ import java.io.File
 @OptIn(ExperimentalFileSystem::class)
 actual val fileSystem: FileSystem = FileSystem.SYSTEM
 
-actual fun executeCommandAndCaptureOutput(
+actual suspend fun executeCommandAndCaptureOutput(
     command: List<String>,
     options: ExecuteCommandOptions
 ): String {
@@ -25,7 +25,7 @@ actual fun executeCommandAndCaptureOutput(
 }
 
 
-actual fun findExecutable(executable: String): String =
+actual suspend fun findExecutable(executable: String): String =
     executeCommandAndCaptureOutput(listOf("which", executable), ExecuteCommandOptions(".", true, false, true))
 
 actual fun runTest(block: suspend () -> Unit): Unit =

@@ -14,13 +14,13 @@ import platform.posix.popen
 
 actual val fileSystem: FileSystem = FileSystem.SYSTEM
 
-actual fun findExecutable(executable: String): String =
+actual suspend fun findExecutable(executable: String): String =
     executable
 
 /**
  * https://stackoverflow.com/questions/57123836/kotlin-native-execute-command-and-get-the-output
  */
-actual fun executeCommandAndCaptureOutput(
+actual suspend fun executeCommandAndCaptureOutput(
     command: List<String>, // "find . -name .git"
     options: ExecuteCommandOptions
 ): String {
