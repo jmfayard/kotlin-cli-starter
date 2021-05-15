@@ -1,10 +1,6 @@
 package io
 
-import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.json.*
 import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
 import okio.ExperimentalFileSystem
 import okio.FileSystem
 import java.io.File
@@ -12,7 +8,7 @@ import java.io.File
 @OptIn(ExperimentalFileSystem::class)
 actual val fileSystem: FileSystem = FileSystem.SYSTEM
 
-actual fun executeCommandAndCaptureOutput(
+actual suspend fun executeCommandAndCaptureOutput(
     command: List<String>,
     options: ExecuteCommandOptions
 ): String {
@@ -29,20 +25,8 @@ actual fun executeCommandAndCaptureOutput(
 }
 
 
-actual fun findExecutable(executable: String): String =
+actual suspend fun findExecutable(executable: String): String =
     executeCommandAndCaptureOutput(listOf("which", executable), ExecuteCommandOptions(".", true, false, true))
-
-actual fun buildHttpClient(): HttpClient {
-    val okHttpClient = OkHttpClient.Builder().build()
-    return HttpClient(OkHttp) {
-        install(JsonFeature) {
-            serializer = defaultSerializer()
-        }
-        engine {
-            preconfigured = okHttpClient
-        }
-    }
-}
 
 actual fun runTest(block: suspend () -> Unit): Unit =
     runBlocking { block() }

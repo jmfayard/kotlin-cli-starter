@@ -16,9 +16,11 @@ You can install using one of the options listed below
 | Source | Command |
 | --- | --- |
 | curl | `curl -L https://raw.githubusercontent.com/jmfayard/kotlin-cli-starter/main/installer.sh \| sudo sh` |
-| Kotlin Native | Clone, run `./gradlew install` then `$ git standup` |
-| Kotlin JVM | Clone and run `./gradlew run` |
 | Tests | `./gradlew allTests` |
+| Kotlin All Platforms | Run `./gradlew allRun` |
+| Kotlin JVM | Run `./gradlew run` |
+| Kotlin Native | Run `./gradlew install` then `$ git standup` |
+| Kotlin Node.JS | Run `./gradlew jsNodeRun` |
 
 ## Why?
 
@@ -48,17 +50,19 @@ Look at the issues https://github.com/jmfayard/kotlin-cli-starter/issues
 
 The template
 
-- can be run both
+- can be run
   - with Kotlin/Native via `$ ./gradlew install` and then `git-standup`
   - on the JVM with `$ ./gradlew run`
+  - on Node.JS with `$ ./gradlew jsNodeRun`  
 - has tests that can also be run both
   - natively `$ ./gradlew nativeTest`
   - on the JVM `$ ./gradlew desktopTest`
+  - on Node.js `$ ./gradlew jsTest`
 - has continuous integration powered by GitHub actions. The code and the tests are run both on native and on the JVM, both on Ubuntu and macOS. See [.github/workflows/runOnGitHub.yml](https://github.com/jmfayard/kotlin-cli-starter/blob/main/.github/workflows/runOnGitHub.yml)  
 - includes those libraries
+  - [ktor-client](https://ktor.io/docs/getting-started-ktor-client.html) to make HTTP calls - _Note: only in the branch ktor-client_ See https://github.com/jmfayard/kotlin-cli-starter/issues/15  
   - [kotlin.test](https://kotlinlang.org/api/latest/kotlin.test/) for multi-platform testing
   - [CliKt](https://github.com/ajalt/clikt) which parses the command-line arguments in a typesafe way and automatically generates the help and Bash/Zsh/Fish auto-completion
-  - [ktor-client](https://ktor.io/docs/getting-started-ktor-client.html) to make HTTP calls
   - [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) which provides Kotlin multiplatform / multi-format serialization
   - [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
   - [gradle refreshVersions](https://jmfayard.github.io/refreshVersions/) to simplify dependency management

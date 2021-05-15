@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJsCompilation
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmCompilation
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -17,6 +18,7 @@ val PROGRAM = "http"
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -25,8 +27,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("cli.MainKt")
-//    mainClassName = "cli.MainKt"
+    mainClass.set("cli.JvmMainKt")
 }
 
 kotlin {
@@ -36,11 +37,16 @@ kotlin {
         hostOs == "Mac OS X" -> macosX64("native")
         hostOs == "Linux" -> linuxX64("native")
         isMingwX64 -> mingwX64("native")
-        else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
+        else -> throw GradleException("Host $hostOs is not supported in Kotlin/Native.")
     }
 
     val desktop = jvm("desktop") {
         // cli.MainKt
+    }
+
+    val node = js(LEGACY) {
+        nodejs()
+        binaries.executable()
     }
 
     nativeTarget.apply {
@@ -51,15 +57,20 @@ kotlin {
         }
     }
     sourceSets {
+        all {
+            languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+        }
+
         val commonMain by getting  {
             dependencies {
                 implementation("com.github.ajalt.clikt:clikt:_")
-                implementation(Ktor.client.core)
-                implementation(Ktor.client.serialization)
+                implementation("com.squareup.okio:okio-multiplatform:_")
+                implementation(KotlinX.coroutines.core)
+
+                /// implementation(Ktor.client.core)
+                /// implementation(Ktor.client.serialization)
                 implementation(KotlinX.serialization.core)
                 implementation(KotlinX.serialization.json)
-                implementation(KotlinX.coroutines.core)
-                implementation("com.squareup.okio:okio-multiplatform:_")
             }
         }
         val commonTest by getting {
@@ -72,7 +83,7 @@ kotlin {
             dependsOn(commonMain)
             dependencies {
                 implementation(Ktor.client.okHttp)
-                implementation(Square.okHttp3.okHttp)
+                /// implementation(Square.okHttp3.okHttp)
             }
         }
         val desktopTest by getting {
@@ -85,10 +96,24 @@ kotlin {
         val nativeMain by getting {
             dependsOn(commonMain)
             dependencies {
-                implementation(Ktor.client.curl)
+                /// implementation(Ktor.client.curl)
             }
         }
         val nativeTest by getting {
+
+        }
+        val jsMain by getting {
+            dependencies {
+                implementation("com.squareup.okio:okio-nodefilesystem-js:_")
+                implementation(KotlinX.nodeJs)
+            }
+        }
+        val jsTest by getting {
+            dependsOn(nativeTest)
+            dependencies {
+                implementation(Kotlin.test.jsRunner)
+                implementation(kotlin("test-js"))
+            }
         }
 
         sourceSets {
@@ -121,10 +146,6 @@ kotlin {
     }
 }
 
-tasks.withType<KotlinCompile>() {
-    kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
-}
-
 tasks.withType<Test> {
     useJUnitPlatform()
 }
@@ -143,8 +164,14 @@ tasks.register<Copy>("install") {
     }
 }
 
+tasks.register("allRun") {
+    group = "run"
+    description = "Run git-standup on the JVM, on Node and natively"
+    dependsOn( "run", "jsNodeRun", "runDebugExecutableNative")
+}
+
 tasks.register("runOnGitHub") {
     group = "run"
     description = "CI with Github Actions : .github/workflows/runOnGitHub.yml"
-    dependsOn( "allTests", "linkDebugExecutableNative", "run")
+    dependsOn( "allTests", "allRun")
 }

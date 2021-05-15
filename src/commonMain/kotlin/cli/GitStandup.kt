@@ -4,19 +4,22 @@ import cli.CliConfig.CURRENT_GIT_USER
 import cli.CliConfig.FIND
 import cli.CliConfig.GIT
 import io.*
-import io.ktor.client.request.*
-import io.ktor.utils.io.core.*
 import kotlinx.serialization.Serializable
 
 /***
  * CUSTOMIZE_ME: this file is all specific to git-standup and can be deleted once understood
  */
 suspend fun runGitStandup(args: Array<String>) {
-    val options = ExecuteCommandOptions(directory = ".", abortOnError = true, redirectStderr = true, trim = true)
+    var options = ExecuteCommandOptions(directory = ".", abortOnError = true, redirectStderr = true, trim = true)
+
+    val jsPackage = "/build/js/packages/kotlin-cli-starter"
+    val pwd = executeCommandAndCaptureOutput(listOf("pwd"), options)
+    if (pwd.contains(jsPackage)) {
+        options = options.copy(directory = pwd.removeSuffix(jsPackage))
+    }
     GIT = findExecutable(GIT)
     FIND = findExecutable(FIND)
     CURRENT_GIT_USER = executeCommandAndCaptureOutput(listOf(GIT, "config", "user.name"), options)
-
     val command = CliCommand()
     val currentDirectory = executeCommandAndCaptureOutput(listOf("pwd"), options).trim()
 
@@ -25,12 +28,8 @@ suspend fun runGitStandup(args: Array<String>) {
     if (command.help) {
         println(command.getFormattedHelp())
         return
-    } else if (command.quote) {
-        val quote = fetchAndPrintRandomQuote()
-        println("> ${quote.quote}")
-        println("-- ${quote.character}")
-        return
     }
+
     val gitRepositories =
         executeCommandAndCaptureOutput(
             command.findCommand(),
@@ -46,7 +45,7 @@ suspend fun runGitStandup(args: Array<String>) {
 }
 
 
-fun findCommitsInRepo(repositoryPath: String, command: CliCommand) {
+suspend fun findCommitsInRepo(repositoryPath: String, command: CliCommand) {
     val options =
         ExecuteCommandOptions(directory = repositoryPath, abortOnError = true, redirectStderr = true, trim = true)
 
@@ -80,26 +79,3 @@ fun findCommitsInRepo(repositoryPath: String, command: CliCommand) {
         println("$ " + command.gitLogCommand())
     }
 }
-
-
-/**
- * Networking can be done in Kotlin Native with Ktor-Client
- * https://ktor.io/docs/getting-started-ktor-client.html
- * */
-suspend fun fetchAndPrintRandomQuote(): GameOfThroneQuote {
-    buildHttpClient().use { client ->
-        return client.get(CliConfig.API_URL) {
-
-        }
-    }
-}
-
-/**
- * Serialization can be done in Kotlin Native with KotlinX Serialization
- * https://github.com/Kotlin/kotlinx.serialization
- * */
-@Serializable
-data class GameOfThroneQuote(
-    val quote: String,
-    val character: String,
-)

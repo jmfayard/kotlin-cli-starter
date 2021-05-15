@@ -1,7 +1,6 @@
 @file:OptIn(ExperimentalFileSystem::class)
 package io
 
-import io.ktor.client.*
 import okio.ExperimentalFileSystem
 import okio.FileSystem
 import okio.Path.Companion.toPath
@@ -12,8 +11,6 @@ import okio.Path.Companion.toPath
  *
  * https://kotlinlang.org/docs/mpp-connect-to-apis.html
  */
-
-expect fun buildHttpClient(): HttpClient
 
 expect val fileSystem: FileSystem
 
@@ -35,7 +32,7 @@ fun writeAllLines(
 fun fileIsReadable(filePath: String): Boolean =
     fileSystem.exists(filePath.toPath())
 
-expect fun executeCommandAndCaptureOutput(
+expect suspend fun executeCommandAndCaptureOutput(
     command: List<String>,
     options: ExecuteCommandOptions
 ): String
@@ -48,7 +45,7 @@ data class ExecuteCommandOptions(
 )
 
 // call $ which $executable on the JVM
-expect fun findExecutable(executable: String): String
+expect suspend fun findExecutable(executable: String): String
 
 // runBlocking doens't exist on JavaScript therefore in common multiplatform code
 // https://github.com/jmfayard/kotlin-cli-starter/issues/9
