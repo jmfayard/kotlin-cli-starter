@@ -1,7 +1,7 @@
 ## See https://github.com/casey/just
 ## Install with $ brew install just
 run:
-    ./gradlew allTests run install
+    ./gradlew allTests allRun install
     cd .. && git-standup
 ci:
     ./gradlew runOnGitHub

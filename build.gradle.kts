@@ -109,8 +109,10 @@ kotlin {
             }
         }
         val jsTest by getting {
+            dependsOn(nativeTest)
             dependencies {
                 implementation(Kotlin.test.jsRunner)
+                implementation(kotlin("test-js"))
             }
         }
 
@@ -162,8 +164,14 @@ tasks.register<Copy>("install") {
     }
 }
 
+tasks.register("allRun") {
+    group = "run"
+    description = "Run git-standup on the JVM, on Node and natively"
+    dependsOn( "run", "jsNodeRun", "runDebugExecutableNative")
+}
+
 tasks.register("runOnGitHub") {
     group = "run"
     description = "CI with Github Actions : .github/workflows/runOnGitHub.yml"
-    dependsOn( "nativeTest", "desktopTest", "linkDebugExecutableNative", "run")
+    dependsOn( "allTests", "allRun")
 }

@@ -13,7 +13,7 @@ class CliCommandTest {
             replace("\\s+".toRegex(), " ").replace("'", "").replace("\"", "")
 
         val cmd = CliCommand()
-        cmd.main(args.split(" ").filter { it.isNotBlank() })
+        cmd.main(args.split(" ").filter { it.isNotBlank() }.also { println(it) })
         val actual = cmd.gitLogCommand().joinToString(separator = " ").simplify()
         assertEquals(expected.simplify(), actual, "Invalid git log for args='$args'")
     }
@@ -38,10 +38,10 @@ class CliCommandTest {
     @Test
     fun gitLogWithLotsOfParameters() {
         val expected =
-            "git --no-pager log --first-parent main --no-merges --since=\"7 days ago\" --until=\"4 days ago\" --after=\"2021-01-01\" --author=\"me\" --abbrev-commit --oneline --pretty=format:'%Cred%h%Creset - %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date='short' --color=always"
-        assertLogCommand("-a me -b main -d 7 -u 4 -D short -A 2021-01-01 -B 2021-01-02 -R", expected)
+            "git --no-pager log --first-parent main --no-merges --since=\"7 days ago\" --until=\"4 days ago\" --after=\"2021-01-01\" --author=\"John\" --abbrev-commit --oneline --pretty=format:'%Cred%h%Creset - %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date='short' --color=always"
+        assertLogCommand("-a John -b main -d 7 -u 4 -D short -A 2021-01-01 -B 2021-01-02 -R", expected)
         assertLogCommand(
-            "--author me --branch main --days 7 --until 4 --date-format short --after 2021-01-01 --before 2021-01-02 --author-date",
+            "--author John --branch main --days 7 --until 4 --date-format short --after 2021-01-01 --before 2021-01-02 --author-date",
             expected
         )
     }
@@ -49,9 +49,9 @@ class CliCommandTest {
     @Test
     fun gitLogForGpg() {
         val expected =
-            "git --no-pager log --all --no-merges --since=\"yesterday\" --author=\"me\" --abbrev-commit --oneline --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cd) %C(bold blue)<%an>%Creset %C(yellow)gpg: %G?%Creset' --date='relative' --color=always"
-        assertLogCommand("-g -a me", expected)
-        assertLogCommand("--gpg-signed --author me", expected)
+            "git --no-pager log --all --no-merges --since=\"yesterday\" --author=\"John\" --abbrev-commit --oneline --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cd) %C(bold blue)<%an>%Creset %C(yellow)gpg: %G?%Creset' --date='relative' --color=always"
+        assertLogCommand("-g -a John", expected)
+        assertLogCommand("--gpg-signed --author John", expected)
     }
 
     @Test
