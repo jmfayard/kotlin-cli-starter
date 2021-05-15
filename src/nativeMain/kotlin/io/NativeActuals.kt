@@ -2,15 +2,13 @@
 
 package io
 
+import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.refTo
 import kotlinx.cinterop.toKString
 import kotlinx.coroutines.runBlocking
 import okio.ExperimentalFileSystem
 import okio.FileSystem
-import platform.posix.chdir
-import platform.posix.fgets
-import platform.posix.pclose
-import platform.posix.popen
+import platform.posix.*
 
 actual val fileSystem: FileSystem = FileSystem.SYSTEM
 
@@ -29,23 +27,27 @@ actual suspend fun executeCommandAndCaptureOutput(
         if (arg.contains(" ")) "'$arg'" else arg
     }
     val redirect = if (options.redirectStderr) " 2>&1 " else ""
-    val fp = popen("$commandToExecute $redirect", "r") ?: error("Failed to run command: $command")
+    val fp: CPointer<FILE>? = popen("$commandToExecute $redirect", "r")
+    val buffer = ByteArray(4096)
+    val returnString = StringBuilder()
 
-    val stdout = buildString {
-        val buffer = ByteArray(4096)
-        while (true) {
-            val input = fgets(buffer.refTo(0), buffer.size, fp) ?: break
-            append(input.toKString())
+    /* Open the command for reading. */
+    if (fp == NULL) {
+        printf("Failed to run command\n")
+        exit(1)
+    }
+
+    /* Read the output a line at a time - output it. */
+    var scan = fgets(buffer.refTo(0), buffer.size, fp)
+    if (scan != null) {
+        while (scan != NULL) {
+            returnString.append(scan!!.toKString())
+            scan = fgets(buffer.refTo(0), buffer.size, fp)
         }
     }
-
-    val status = pclose(fp)
-    if (status != 0 && options.abortOnError) {
-        println(stdout)
-        throw Exception("Command `$command` failed with status $status${if (options.redirectStderr) ": $stdout" else ""}")
-    }
-
-    return if (options.trim) stdout.trim() else stdout
+    /* close */
+    pclose(fp)
+    return if (options.trim) returnString.toString().trim() else returnString.toString()
 }
 
 actual fun runTest(block: suspend () -> Unit) =
