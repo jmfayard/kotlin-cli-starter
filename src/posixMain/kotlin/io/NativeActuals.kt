@@ -12,8 +12,6 @@ import platform.posix.fgets
 import platform.posix.pclose
 import platform.posix.popen
 
-actual val fileSystem: FileSystem = FileSystem.SYSTEM
-
 actual suspend fun findExecutable(executable: String): String =
     executable
 

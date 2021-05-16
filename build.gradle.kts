@@ -29,31 +29,18 @@ application {
 }
 
 kotlin {
-    val hostOs = System.getProperty("os.name")
-    val isMingwX64 = hostOs.startsWith("Windows")
-    val nativeTarget = when {
-        hostOs == "Mac OS X" -> macosX64("native")
-        hostOs == "Linux" -> linuxX64("native")
-        isMingwX64 -> mingwX64("native")
-        else -> throw GradleException("Host $hostOs is not supported in Kotlin/Native.")
-    }
 
-    val desktop = jvm("desktop") {
-        // cli.MainKt
-    }
+    macosX64 { binaries { executable { entryPoint = "main" } } }
+    mingwX64 { binaries { executable { entryPoint = "main" } } }
+    linuxX64 { binaries { executable { entryPoint = "main" } } }
+
+    val jvmTarget = jvm()
 
     val node = js(LEGACY) {
         nodejs()
         binaries.executable()
     }
 
-    nativeTarget.apply {
-        binaries {
-            executable {
-                entryPoint = "main"
-            }
-        }
-    }
     sourceSets {
         all {
             languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
@@ -77,36 +64,50 @@ kotlin {
                 implementation(Kotlin.test.annotationsCommon)
             }
         }
-        val desktopMain: KotlinSourceSet by getting {
+        getByName("jvmMain") {
             dependsOn(commonMain)
             dependencies {
                 implementation(Ktor.client.okHttp)
                 /// implementation(Square.okHttp3.okHttp)
             }
         }
-        val desktopTest by getting {
+        getByName("jvmTest") {
             dependencies {
                 implementation(Testing.junit.api)
                 implementation(Testing.junit.engine)
                 implementation(Kotlin.test.junit5)
             }
         }
-        val nativeMain by getting {
+        val nativeMain by creating {
             dependsOn(commonMain)
             dependencies {
                 /// implementation(Ktor.client.curl)
             }
         }
-        val nativeTest by getting {
-
+        val nativeTest by creating {
+            dependsOn(commonTest)
         }
-        val jsMain by getting {
+        val posixMain by creating {
+            dependsOn(nativeMain)
+        }
+        val posixTest by creating {
+            dependsOn(nativeTest)
+        }
+        arrayOf("macosX64", "linuxX64").forEach { targetName ->
+            getByName("${targetName}Main").dependsOn(posixMain)
+            getByName("${targetName}Test").dependsOn(posixTest)
+        }
+        arrayOf("macosX64", "linuxX64", "mingwX64").forEach { targetName ->
+            getByName("${targetName}Main").dependsOn(nativeMain)
+            getByName("${targetName}Test").dependsOn(nativeTest)
+        }
+        getByName("jsMain") {
             dependencies {
                 implementation("com.squareup.okio:okio-nodefilesystem-js:_")
                 implementation(KotlinX.nodeJs)
             }
         }
-        val jsTest by getting {
+        getByName("jsTest") {
             dependsOn(nativeTest)
             dependencies {
                 implementation(Kotlin.test.jsRunner)
@@ -117,13 +118,14 @@ kotlin {
         sourceSets {
             all {
                 languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+                languageSettings.useExperimentalAnnotation("okio.ExperimentalFileSystem")
             }
         }
     }
 
     tasks.withType<JavaExec> {
         // code to make run task in kotlin multiplatform work
-        val compilation = desktop.compilations.getByName<KotlinJvmCompilation>("main")
+        val compilation = jvmTarget.compilations.getByName<KotlinJvmCompilation>("main")
 
         val classes = files(
             compilation.runtimeDependencyFiles,
@@ -136,10 +138,10 @@ kotlin {
         archiveClassifier.set("")
         archiveVersion.set("")
 
-        from(desktop.compilations.getByName("main").output)
+        from(jvmTarget.compilations.getByName("main").output)
         configurations = mutableListOf(
-            desktop.compilations.getByName("main").compileDependencyFiles as Configuration,
-            desktop.compilations.getByName("main").runtimeDependencyFiles as Configuration
+            jvmTarget.compilations.getByName("main").compileDependencyFiles as Configuration,
+            jvmTarget.compilations.getByName("main").runtimeDependencyFiles as Configuration
         )
     }
 }
@@ -152,7 +154,16 @@ tasks.register<Copy>("install") {
     group = "run"
     description = "Build the native executable and install it"
     val destDir = "/usr/local/bin"
-    dependsOn("runDebugExecutableNative")
+
+    val hostOs = System.getProperty("os.name")
+    val isMingwX64 = hostOs.startsWith("Windows")
+    val nativeTarget = when {
+        hostOs == "Mac OS X" -> "MacosX64"
+        hostOs == "Linux" -> "LinuxX64"
+        isMingwX64 -> "MingwX64"
+        else -> throw GradleException("Host $hostOs is not supported in Kotlin/Native.")
+    }
+    dependsOn("runDebugExecutable$nativeTarget")
     from("build/bin/native/debugExecutable") {
         rename { PROGRAM }
     }
