@@ -1,7 +1,5 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJsCompilation
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmCompilation
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
@@ -61,7 +59,7 @@ kotlin {
             languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
         }
 
-        val commonMain by getting  {
+        val commonMain by getting {
             dependencies {
                 implementation("com.github.ajalt.clikt:clikt:_")
                 implementation("com.squareup.okio:okio-multiplatform:_")
@@ -167,11 +165,48 @@ tasks.register<Copy>("install") {
 tasks.register("allRun") {
     group = "run"
     description = "Run git-standup on the JVM, on Node and natively"
-    dependsOn( "run", "jsNodeRun", "runDebugExecutableNative")
+    dependsOn("run", "jsNodeRun", "runDebugExecutableNative")
 }
 
 tasks.register("runOnGitHub") {
     group = "run"
     description = "CI with Github Actions : .github/workflows/runOnGitHub.yml"
-    dependsOn( "allTests", "allRun")
+    dependsOn("allTests", "allRun")
+}
+
+interface Injected {
+    @get:Inject
+    val exec: ExecOperations
+    @get:Inject
+    val fs: FileSystemOperations
+}
+
+tasks.register("completions") {
+    group = "run"
+    description = "Generate Bash/Zsh/Fish completion files"
+    dependsOn(":install")
+    val injected = project.objects.newInstance<Injected>()
+    val shells = listOf(
+        Triple("bash", file("completions/git-standup.bash"), "/usr/local/etc/bash_completion.d"),
+        Triple("zsh", file("completions/_git_standup.zsh"), "/usr/local/share/zsh/site-functions"),
+        Triple("fish", file("completions/git-standup.fish"), "/usr/local/share/fish/vendor_completions.d"),
+    )
+    for ((SHELL, FILE, INSTALL) in shells) {
+        actions.add {
+            println("Updating   $SHELL completion file at $FILE")
+            injected.exec.exec {
+                commandLine("git-standup", "--generate-completion", SHELL)
+                standardOutput = FILE.outputStream()
+            }
+            println("Installing $SHELL completion into $INSTALL")
+            injected.fs.copy {
+                from(FILE)
+                into(INSTALL)
+            }
+        }
+    }
+    doLast {
+        println("On macOS, follow those instructions to configure shell completions")
+        println("👀 https://docs.brew.sh/Shell-Completion 👀")
+    }
 }
