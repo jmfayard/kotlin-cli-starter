@@ -60,7 +60,8 @@ The template
   - on Node.js `$ ./gradlew jsTest`
 - has continuous integration powered by GitHub actions. The code and the tests are run both on native and on the JVM, both on Ubuntu and macOS. See [.github/workflows/runOnGitHub.yml](https://github.com/jmfayard/kotlin-cli-starter/blob/main/.github/workflows/runOnGitHub.yml)  
 - includes those libraries
-  - [ktor-client](https://ktor.io/docs/getting-started-ktor-client.html) to make HTTP calls - _Note: only in the branch ktor-client_ See https://github.com/jmfayard/kotlin-cli-starter/issues/15  
+  - [ktor-client](https://ktor.io/docs/getting-started-ktor-client.html) to make HTTP calls - _Note: only in the branch ktor-client_ See https://github.com/jmfayard/kotlin-cli-starter/issues/15
+  - [Okio multiplatform](https://square.github.io/okio/multiplatform/) allows reading and writing files  
   - [kotlin.test](https://kotlinlang.org/api/latest/kotlin.test/) for multi-platform testing
   - [CliKt](https://github.com/ajalt/clikt) which parses the command-line arguments in a typesafe way and automatically generates the help and Bash/Zsh/Fish auto-completion
   - [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) which provides Kotlin multiplatform / multi-format serialization
