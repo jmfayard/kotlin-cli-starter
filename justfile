@@ -18,6 +18,7 @@ install:
 completions:
     ./gradlew completions
 brew:
-    brew reinstall --debug --verbose --build-from-source git-standup-kotlin
-    brew test git-standup-kotlin
-    brew audit --strict git-standup-kotlin
+    brew reinstall --debug --verbose --build-from-source kotlin-cli-starter
+    brew test kotlin-cli-starter
+    brew audit --strict kotlin-cli-starter
+    brew audit kotlin-cli-starter --online --new-formula
