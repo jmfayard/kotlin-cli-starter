@@ -1,15 +1,16 @@
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmCompilation
+import org.jetbrains.kotlin.gradle.targets.js.npm.packageJson
 
 plugins {
     application
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("com.github.johnrengelman.shadow")
+    id("lt.petuska.npm.publish")
 }
 
 group = "cli"
-version = "1.0-SNAPSHOT"
+version = "0.1.1"
 
 // CUSTOMIZE_ME: the name of your command-line tool goes here
 val PROGRAM = "http"
@@ -183,6 +184,34 @@ tasks.register("runOnGitHub") {
     group = "run"
     description = "CI with Github Actions : .github/workflows/runOnGitHub.yml"
     dependsOn("allTests", "allRun")
+}
+
+// See https://github.com/mpetuska/npm-publish
+npmPublishing {
+    repositories {
+        val token = System.getenv("NPM_AUTH_TOKEN")
+        if (token == null) {
+            println("No environment variable NPM_AUTH_TOKEN found, using dry-run for publish")
+            dry = true
+        } else {
+            repository("npmjs") {
+                registry = uri("https://registry.npmjs.org")
+                authToken = token
+            }
+        }
+    }
+    publications {
+        publication("js") {
+            readme = file("README.md")
+            packageJson {
+                private = false
+                keywords = jsonArray(
+                    "kotlin", "git", "bash"
+                )
+            }
+        }
+
+    }
 }
 
 interface Injected {
