@@ -10,10 +10,10 @@ plugins {
 }
 
 group = "cli"
-version = "0.1.1"
+version = "0.2.0"
 
 // CUSTOMIZE_ME: the name of your command-line tool goes here
-val PROGRAM = "http"
+val PROGRAM = "git-standup"
 
 repositories {
     mavenCentral()
@@ -176,7 +176,7 @@ tasks.register<Copy>("install") {
 
 tasks.register("allRun") {
     group = "run"
-    description = "Run git-standup on the JVM, on Node and natively"
+    description = "Run $PROGRAM on the JVM, on Node and natively"
     dependsOn("run", "jsNodeRun", "runDebugExecutableNative")
 }
 
@@ -188,6 +188,7 @@ tasks.register("runOnGitHub") {
 
 // See https://github.com/mpetuska/npm-publish
 npmPublishing {
+    dry = false
     repositories {
         val token = System.getenv("NPM_AUTH_TOKEN")
         if (token == null) {
@@ -204,10 +205,20 @@ npmPublishing {
         publication("js") {
             readme = file("README.md")
             packageJson {
+                bin = mutableMapOf(
+                    Pair(PROGRAM, "./$PROGRAM")
+                )
+                main = PROGRAM
                 private = false
                 keywords = jsonArray(
                     "kotlin", "git", "bash"
                 )
+            }
+            files { assemblyDir -> // Specifies what files should be packaged. Preconfigured for default publications, yet can be extended if needed
+                from("$assemblyDir/../dir")
+                from("bin") {
+                    include(PROGRAM)
+                }
             }
         }
 

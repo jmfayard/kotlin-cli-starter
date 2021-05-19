@@ -15,7 +15,8 @@ You can install using one of the options listed below
 
 | Source | Command |
 | --- | --- |
-| curl | `curl -L https://raw.githubusercontent.com/jmfayard/kotlin-cli-starter/main/installer.sh \| sudo sh` |
+| Node | npm install -g kotlin-cli-starter 
+| Installer | `curl -L https://raw.githubusercontent.com/jmfayard/kotlin-cli-starter/main/installer.sh \| sudo sh` |
 | Tests | `./gradlew allTests` |
 | Kotlin All Platforms | Run `./gradlew allRun` |
 | Kotlin JVM | Run `./gradlew run` |
@@ -53,7 +54,7 @@ The template
 - can be run
   - with Kotlin/Native via `$ ./gradlew install` and then `git-standup`
   - on the JVM with `$ ./gradlew run`
-  - on Node.JS with `$ ./gradlew jsNodeRun`  
+  - on Node.JS with `$ ./gradlew jsNodeRun`. The package is published on https://www.npmjs.com/package/kotlin-cli-starter
 - has tests that can also be run both
   - natively `$ ./gradlew nativeTest`
   - on the JVM `$ ./gradlew desktopTest`

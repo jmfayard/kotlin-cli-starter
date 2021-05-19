@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+// CUSTOMIZE_ME: rename this file
+// CUSTOMIZE_ME: update the line below, see ./build/publications/npm/js
+let program = require("./kotlin-cli-starter.js")
+
+process.argv.shift()
+process.argv.shift()
+program.cli.gitStandup(process.argv)
