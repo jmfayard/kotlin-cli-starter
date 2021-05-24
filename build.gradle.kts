@@ -1,5 +1,5 @@
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmCompilation
-import org.jetbrains.kotlin.gradle.targets.js.npm.packageJson
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithHostTests
 
 plugins {
     application
@@ -29,11 +29,22 @@ application {
     mainClass.set("cli.JvmMainKt")
 }
 
+val hostOs = System.getProperty("os.name")
+val nativeTarget = when {
+    hostOs == "Mac OS X" -> "MacosX64"
+    hostOs == "Linux" -> "LinuxX64"
+    hostOs.startsWith("Windows") -> "MingwX64"
+    else -> throw GradleException("Host $hostOs is not supported in Kotlin/Native.")
+}
+
+fun KotlinNativeTargetWithHostTests.configureTarget() =
+    binaries { executable { entryPoint = "main" } }
+
 kotlin {
 
-    macosX64 { binaries { executable { entryPoint = "main" } } }
-    mingwX64 { binaries { executable { entryPoint = "main" } } }
-    linuxX64 { binaries { executable { entryPoint = "main" } } }
+    macosX64 { configureTarget() }
+    mingwX64 { configureTarget() }
+    linuxX64 { configureTarget() }
 
     val jvmTarget = jvm()
 
@@ -156,14 +167,7 @@ tasks.register<Copy>("install") {
     description = "Build the native executable and install it"
     val destDir = "/usr/local/bin"
 
-    val hostOs = System.getProperty("os.name")
-    val isMingwX64 = hostOs.startsWith("Windows")
-    val nativeTarget = when {
-        hostOs == "Mac OS X" -> "MacosX64"
-        hostOs == "Linux" -> "LinuxX64"
-        isMingwX64 -> "MingwX64"
-        else -> throw GradleException("Host $hostOs is not supported in Kotlin/Native.")
-    }
+
     dependsOn("runDebugExecutable$nativeTarget")
     from("build/bin/native/debugExecutable") {
         rename { PROGRAM }
@@ -177,7 +181,7 @@ tasks.register<Copy>("install") {
 tasks.register("allRun") {
     group = "run"
     description = "Run $PROGRAM on the JVM, on Node and natively"
-    dependsOn("run", "jsNodeRun", "runDebugExecutableNative")
+    dependsOn("run", "jsNodeRun", "runDebugExecutable$nativeTarget")
 }
 
 tasks.register("runOnGitHub") {
