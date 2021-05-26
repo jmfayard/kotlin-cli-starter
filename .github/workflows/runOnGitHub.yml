@@ -31,6 +31,7 @@ jobs:
       # Execute Gradle commands in GitHub Actions workflows
       # => https://github.com/marketplace/actions/gradle-command
       - id: gradle
+        name: ./gradlew runOnGitHub
         uses: eskatos/gradle-command-action@v1
         with:
           arguments: runOnGitHub

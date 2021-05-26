@@ -6,7 +6,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("com.github.johnrengelman.shadow")
-    id("lt.petuska.npm.publish")
+    id("dev.petuska.npm.publish")
 }
 
 group = "cli"
