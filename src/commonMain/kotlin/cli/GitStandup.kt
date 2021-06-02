@@ -4,7 +4,6 @@ import cli.CliConfig.CURRENT_GIT_USER
 import cli.CliConfig.FIND
 import cli.CliConfig.GIT
 import io.*
-import kotlinx.serialization.Serializable
 
 /***
  * CUSTOMIZE_ME: this file is all specific to git-standup and can be deleted once understood

@@ -11,6 +11,8 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
+import com.github.ajalt.mordant.rendering.TextColors.*
+import com.github.ajalt.mordant.terminal.Terminal
 import io.fileIsReadable
 import io.readAllText
 
@@ -82,9 +84,14 @@ class CliCommand : CliktCommand(
         help = "Display the author date instead of the committer date"
     ).flag()
     val verbose by option("-v", "--verbose", help = "verbose").flag(defaultForHelp = "disabled")
+    val colors by option("--colors", help = "print using colors").flag()
 
     override fun run() {
         if (verbose) println(this)
+        if (colors) {
+            val t = Terminal()
+            t.println("${red("red")} ${white("white")} and ${blue("blue")}")
+        }
     }
 
     fun gitLogCommand(): List<String> {
@@ -134,7 +141,8 @@ class CliCommand : CliktCommand(
 
         args += FIND
         args += when {
-            fileIsReadable(GIT_STANDUP_WHITELIST) -> readAllText(GIT_STANDUP_WHITELIST).lines().map { it.trim().removeSuffix("/") }
+            fileIsReadable(GIT_STANDUP_WHITELIST) -> readAllText(GIT_STANDUP_WHITELIST).lines()
+                .map { it.trim().removeSuffix("/") }
             else -> listOf(".")
         }
         if (symbolicLinks) args += "-L"
