@@ -55,6 +55,14 @@ class CliCommandTest {
     }
 
     @Test
+    fun gitLogWithoutColors() {
+        val expected =
+            "git --no-pager log --all --no-merges --since=\"yesterday\" --author=\"John\" --abbrev-commit --oneline --pretty=format:'%h - %s (%cd) <%an>' --date='relative' --color=always"
+        assertLogCommand("-r -a John -w MON-FRI -m 3", expected)
+        assertLogCommand("--report --author John --week-day MON-FRI --depth 3", expected)
+    }
+
+    @Test
     fun findWithNoArguments() {
         val cmd = CliCommand()
         cmd.main(emptyList())
