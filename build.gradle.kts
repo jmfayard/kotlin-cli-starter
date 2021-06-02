@@ -169,7 +169,8 @@ tasks.register<Copy>("install") {
 
 
     dependsOn("runDebugExecutable$nativeTarget")
-    from("build/bin/native/debugExecutable") {
+    from("build/bin/$nativeTarget/debugExecutable") {
+        include("$PROGRAM.kexe")
         rename { PROGRAM }
     }
     into(destDir)
