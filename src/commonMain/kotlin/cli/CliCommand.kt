@@ -39,6 +39,7 @@ class CliCommand : CliktCommand(
         completionOption()
     }
 
+    lateinit var reportFile: String
     val authorOpt: String by option("--author", "-a", help = "Specify author to restrict search to").default("me")
     val branch: String by option(
         "--branch",
@@ -106,6 +107,10 @@ class CliCommand : CliktCommand(
         val gitPrettyDate = if (authorDate) "%ad" else "%cd"
         var gitPrettyFormat = "%Cred%h%Creset - %s %Cgreen($gitPrettyDate) %C(bold blue)<%an>%Creset"
         if (gpgSigned) gitPrettyFormat += " %C(yellow)gpg: %G?%Creset"
+        if (report) {
+            val withGpg = if (gpgSigned) "gpg: %G?" else ""
+            gitPrettyFormat = "%h - %s  ($gitPrettyDate) <%an>  $withGpg\n"
+        }
 
         val until = when {
             daysUntil != 0 -> "--until='${daysUntil} days ago'"
