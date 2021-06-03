@@ -47,3 +47,13 @@ actual suspend fun executeCommandAndCaptureOutput(
 
 actual fun runTest(block: suspend () -> Unit): dynamic =
     GlobalScope.promise { block() }
+
+/***
+ * If you need to access platform-specific APIs from the shared code,
+ * use the Kotlin mechanism of expected and actual declarations.
+ *
+ * https://kotlinlang.org/docs/mpp-connect-to-apis.html
+ */
+actual val platform: Platform by lazy {
+    TODO("figure out how to call `process.platform` on nodejs")
+}

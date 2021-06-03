@@ -30,3 +30,21 @@ actual suspend fun findExecutable(executable: String): String =
 
 actual fun runTest(block: suspend () -> Unit): Unit =
     runBlocking { block() }
+
+/***
+ * If you need to access platform-specific APIs from the shared code,
+ * use the Kotlin mechanism of expected and actual declarations.
+ *
+ * https://kotlinlang.org/docs/mpp-connect-to-apis.html
+ */
+actual val platform: Platform by lazy {
+    val osName = System.getProperty("os.name").lowercase()
+
+    when {
+        osName.startsWith("Linux") -> Platform.LINUX
+        osName.startsWith("Windows") -> Platform.WINDOWS
+        osName.startsWith("Mac") -> Platform.MACOS
+        osName.startsWith("Darwin") -> Platform.MACOS
+        else -> error("unknown osName: $osName")
+    }
+}

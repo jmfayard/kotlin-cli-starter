@@ -4,7 +4,6 @@ import cli.CliConfig.CURRENT_GIT_USER
 import cli.CliConfig.FIND
 import cli.CliConfig.GIT
 import io.*
-import kotlinx.serialization.Serializable
 
 /***
  * CUSTOMIZE_ME: this file is all specific to git-standup and can be deleted once understood
@@ -13,7 +12,10 @@ suspend fun runGitStandup(args: Array<String>) {
     var options = ExecuteCommandOptions(directory = ".", abortOnError = true, redirectStderr = true, trim = true)
 
     val jsPackage = "/build/js/packages/kotlin-cli-starter"
-    val pwd = executeCommandAndCaptureOutput(listOf("pwd"), options)
+    val pwd = when(platform) {
+        Platform.WINDOWS -> executeCommandAndCaptureOutput(listOf("echo", "%cd%"), options).trim()
+        else -> executeCommandAndCaptureOutput(listOf("pwd"), options).trim()
+    }
     if (pwd.contains(jsPackage)) {
         options = options.copy(directory = pwd.removeSuffix(jsPackage))
     }
@@ -21,7 +23,10 @@ suspend fun runGitStandup(args: Array<String>) {
     FIND = findExecutable(FIND)
     CURRENT_GIT_USER = executeCommandAndCaptureOutput(listOf(GIT, "config", "user.name"), options)
     val command = CliCommand()
-    val currentDirectory = executeCommandAndCaptureOutput(listOf("pwd"), options).trim()
+    val currentDirectory = when(platform) {
+        Platform.WINDOWS -> executeCommandAndCaptureOutput(listOf("echo", "%cd%"), options).trim()
+        else -> executeCommandAndCaptureOutput(listOf("pwd"), options).trim()
+    }
 
     command.main(args)
 
@@ -30,11 +35,24 @@ suspend fun runGitStandup(args: Array<String>) {
         return
     }
 
-    val gitRepositories =
-        executeCommandAndCaptureOutput(
+    val gitRepositories = when(platform) {
+        Platform.WINDOWS -> {
+            executeCommandAndCaptureOutput(
+                listOf("where", "-r", ".", "HEAD"),
+                options.copy(abortOnError = false, directory = currentDirectory)
+            )
+                .lines()
+                .filter { it.endsWith(".git\\HEAD") }
+                .joinToString("\n") {
+                it.substringBeforeLast("\\HEAD")
+            }
+        }
+        else -> executeCommandAndCaptureOutput(
             command.findCommand(),
             options.copy(abortOnError = false, directory = currentDirectory)
         )
+    }
+
     gitRepositories.lines().filter { it.contains(".git") }.forEach { path ->
         val repositoryPath = when {
             path.startsWith("./") -> "$currentDirectory/" + path.removePrefix("./")
