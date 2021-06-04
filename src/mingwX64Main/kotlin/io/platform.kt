@@ -32,6 +32,7 @@ actual val platform: Platform by lazy {
         println("uname: $uname")
     }
     when {
+        uname.startsWith("MSYS") -> Platform.LINUX
         uname.startsWith("MINGW") -> Platform.LINUX
         uname.startsWith("CYGWIN") -> Platform.LINUX
         else -> Platform.WINDOWS
