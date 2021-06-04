@@ -115,7 +115,7 @@ class CliCommand : CliktCommand(
         args += "--author=$author"
         args += "--abbrev-commit"
         args += "--oneline"
-//        args += "--pretty=format:$gitPrettyFormat"
+        args += "--pretty=format:$gitPrettyFormat"
         args += "--date=$gitDateFormat"
         args += "--color=$color"
         if (diffStat != null) args += ("--stat")

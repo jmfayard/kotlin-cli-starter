@@ -18,12 +18,12 @@ actual suspend fun findExecutable(executable: String): String =
  * https://stackoverflow.com/questions/57123836/kotlin-native-execute-command-and-get-the-output
  */
 actual suspend fun executeCommandAndCaptureOutput(
-    command: List<String>, // "find . -name .git"
+    command: List<String>,
     options: ExecuteCommandOptions
 ): String {
     chdir(options.directory)
     val commandToExecute = command.joinToString(separator = " ") { arg ->
-        if (arg.contains(" ")) "'$arg'" else arg
+        if (arg.contains(" ") || arg.contains("%")) "\"$arg\"" else arg
     }
     val redirect = if (options.redirectStderr) " 2>&1 " else ""
     val fp = _popen("$commandToExecute $redirect", "r") ?: error("Failed to run command: $command")
@@ -39,6 +39,7 @@ actual suspend fun executeCommandAndCaptureOutput(
     val status = _pclose(fp)
     if (status != 0 && options.abortOnError) {
         println(stdout)
+        println("failed to run: $commandToExecute")
         throw Exception("Command `$command` failed with status $status${if (options.redirectStderr) ": $stdout" else ""}")
     }
 
