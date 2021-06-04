@@ -61,6 +61,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation("com.github.ajalt.clikt:clikt:_")
+                implementation("com.github.ajalt.mordant:mordant:_")
                 implementation("com.squareup.okio:okio-multiplatform:_")
                 implementation(KotlinX.coroutines.core)
 
@@ -169,13 +170,15 @@ tasks.register<Copy>("install") {
 
 
     dependsOn("runDebugExecutable$nativeTarget")
-    from("build/bin/$nativeTarget/debugExecutable") {
-        include("$PROGRAM.kexe")
+    val targetLowercase = nativeTarget.first().toLowerCase() + nativeTarget.substring(1)
+    val folder = "build/bin/$targetLowercase/debugExecutable"
+    from(folder) {
+        include("${rootProject.name}.kexe")
         rename { PROGRAM }
     }
     into(destDir)
     doLast {
-        println("$ $PROGRAM installed into $destDir")
+        println("$ cp $folder/${rootProject.name}.kexe $destDir/$PROGRAM")
     }
 }
 

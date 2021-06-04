@@ -5,27 +5,29 @@
 class KotlinCliStarter < Formula
   desc "Git extension to generate reports for standup - in Kotlin Multiplatform"
   homepage "https://github.com/jmfayard/kotlin-cli-starter"
-  url "https://github.com/jmfayard/kotlin-cli-starter/archive/refs/tags/v0.1.tar.gz"
-  sha256 "358c6c7cd2b3b752a84be972202645cbf9b12fc34ce18aaedf3563b7b005669c"
+  url "https://github.com/jmfayard/kotlin-cli-starter/archive/refs/tags/v0.3.tar.gz"
+  sha256 "bbfaec0b9ed0918feeeed02036e8bddfd5d028f11e09fec8e9af1361a3eaeace"
   license "MIT"
 
   depends_on "gradle" => :build
   depends_on "openjdk" => :build
 
-  conflicts_with "git-standup", because: "it's a reimplementation of this tool"
+  conflicts_with "git-standup", because: "both install `git-standup` binaries"
 
   def install
-    system "git", "init", "."
-    system "git", "config", "--global", "user.name", "Git User"
-    system "./gradlew", "nativeTest", "linkReleaseExecutableNative"
-    bash_completion.install "dist/git-standup.kt.bash" => "git-standup"
-    fish_completion.install "dist/git-standup.kt.fish"
-    zsh_completion.install "dist/git-standup.kt.zsh" => "_git-standup"
-    bin.install "build/bin/native/releaseExecutable/kotlin-cli-starter.kexe" => "git-standup"
+    system "./gradlew", "macosX64Test", "linkReleaseExecutableMacosX64"
+    bin.install "build/bin/macosX64/releaseExecutable/kotlin-cli-starter.kexe" => "git-standup"
+    bash_completion.install "completions/git-standup.bash" => "git-standup"
+    fish_completion.install "completions/git-standup.fish"
+    zsh_completion.install "completions/_git_standup.zsh" => "_git_standup"
   end
 
   test do
-    system "git", "config", "--global", "user.name", "Git User"
-    system "#{bin}/git-standup", "--help"
+    system "git", "init"
+    testpath/"test").write "test"
+    system "git", "add", "#{testpath}/test"
+    system "git", "commit", "--message", "test"
+    system "git", "config", "--global", "user.name", "tap.user"
+    system "#{bin}/git-standup", "--days", "3"
   end
 end

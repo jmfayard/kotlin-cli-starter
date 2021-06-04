@@ -65,6 +65,7 @@ The template
   - [Okio multiplatform](https://square.github.io/okio/multiplatform/) allows reading and writing files  
   - [kotlin.test](https://kotlinlang.org/api/latest/kotlin.test/) for multi-platform testing
   - [CliKt](https://github.com/ajalt/clikt) which parses the command-line arguments in a typesafe way and automatically generates the help and Bash/Zsh/Fish auto-completion
+  - [mordant](https://github.com/ajalt/mordant) to have colors and styles in the terminal
   - [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization) which provides Kotlin multiplatform / multi-format serialization
   - [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines)
   - [gradle refreshVersions](https://jmfayard.github.io/refreshVersions/) to simplify dependency management
