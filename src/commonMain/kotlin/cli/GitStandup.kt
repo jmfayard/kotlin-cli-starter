@@ -15,11 +15,9 @@ import okio.buffer
 suspend fun runGitStandup(args: Array<String>) {
     var options = ExecuteCommandOptions(directory = ".", abortOnError = true, redirectStderr = true, trim = true)
 
+    //TODO: move section into nodejs actual code ?
     val jsPackage = "/build/js/packages/kotlin-cli-starter"
-    val pwd = when(platform) {
-        Platform.WINDOWS -> executeCommandAndCaptureOutput(listOf("echo", "%cd%"), options).trim()
-        else -> executeCommandAndCaptureOutput(listOf("pwd"), options).trim()
-    }
+    val pwd = pwd(options)
     if (pwd.contains(jsPackage)) {
         options = options.copy(directory = pwd.removeSuffix(jsPackage))
     }
@@ -27,10 +25,7 @@ suspend fun runGitStandup(args: Array<String>) {
     FIND = findExecutable(FIND)
     CURRENT_GIT_USER = executeCommandAndCaptureOutput(listOf(GIT, "config", "user.name"), options)
     val command = CliCommand()
-    val currentDirectory = when(platform) {
-        Platform.WINDOWS -> executeCommandAndCaptureOutput(listOf("echo", "%cd%"), options).trim()
-        else -> executeCommandAndCaptureOutput(listOf("pwd"), options).trim()
-    }
+    val currentDirectory = pwd(options)
 
     command.main(args)
 
@@ -38,7 +33,11 @@ suspend fun runGitStandup(args: Array<String>) {
         println(command.getFormattedHelp())
         return
     }
-    command.reportFile = "$pwd/git-standup-report.txt"
+    command.reportFile = when(platform) {
+        Platform.WINDOWS -> "$pwd\\git-standup-report.txt"
+        else -> "$pwd/git-standup-report.txt"
+    }
+    println("reportFile ${command.reportFile}")
     if (command.report) {
         println("Generating ${command.reportFile}")
         fileSystem.delete(command.reportFile.toPath())
@@ -73,10 +72,15 @@ suspend fun runGitStandup(args: Array<String>) {
 
 
 suspend fun findCommitsInRepo(repositoryPath: String, command: CliCommand) {
+    println("appending sink: ${command.reportFile}")
     val write: BufferedSink = fileSystem.appendingSink(command.reportFile.toPath()).buffer()
-    fun log(message: String) = when {
-        command.report -> write.writeUtf8("$message\n")
-        else -> println(message)
+    fun log(message: String) {
+        when {
+            command.report -> {
+                write.writeUtf8("$message\n")
+            }
+            else -> println(message)
+        }
     }
 
     val options =

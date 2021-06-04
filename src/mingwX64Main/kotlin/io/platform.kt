@@ -2,10 +2,11 @@ package io
 
 import kotlinx.coroutines.runBlocking
 
+actual val compilationTarget = CompilationTarget.WINDOWS
 actual val platform: Platform by lazy {
     val uname = runBlocking {
         try {
-            val whereResult = executeCommandAndCaptureOutput(
+            executeCommandAndCaptureOutput(
                 listOf("where", "uname"),
                 ExecuteCommandOptions(
                     directory = ".",
@@ -14,11 +15,6 @@ actual val platform: Platform by lazy {
                     trim = true,
                 ),
             )
-            println(whereResult)
-            if(whereResult.contains("Could not find")) {
-                println("uname is not available")
-                return@runBlocking ""
-            }
             executeCommandAndCaptureOutput(
                 listOf("uname", "-a"),
                 ExecuteCommandOptions(

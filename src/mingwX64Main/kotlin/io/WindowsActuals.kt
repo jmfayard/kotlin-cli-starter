@@ -25,6 +25,7 @@ actual suspend fun executeCommandAndCaptureOutput(
     val commandToExecute = command.joinToString(separator = " ") { arg ->
         if (arg.contains(" ") || arg.contains("%")) "\"$arg\"" else arg
     }
+    println("executing: $commandToExecute")
     val redirect = if (options.redirectStderr) " 2>&1 " else ""
     val fp = _popen("$commandToExecute $redirect", "r") ?: error("Failed to run command: $command")
 
@@ -44,6 +45,13 @@ actual suspend fun executeCommandAndCaptureOutput(
     }
 
     return if (options.trim) stdout.trim() else stdout
+}
+
+actual suspend fun pwd(options: ExecuteCommandOptions): String {
+    return when(platform) {
+        Platform.WINDOWS -> executeCommandAndCaptureOutput(listOf("echo", "%cd%"), options).trim('"', ' ')
+        else -> executeCommandAndCaptureOutput(listOf("pwd"), options).trim()
+    }
 }
 
 actual fun runTest(block: suspend () -> Unit) =

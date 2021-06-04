@@ -1,4 +1,0 @@
-# /Users/jmfayard/IdeaProjects/kotlin-cli-starter
-2c8d0f0 - Add mordant  (59 minutes ago) <Jean-Michel Fayard>  
-
-506df36 - Upgrade to okio 3.0.0-alpha.6  (16 hours ago) <Jean-Michel Fayard>

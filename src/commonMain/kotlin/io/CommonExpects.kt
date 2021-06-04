@@ -6,6 +6,7 @@ import okio.FileSystem
 import okio.Path.Companion.toPath
 
 expect val platform: Platform
+expect val compilationTarget: CompilationTarget
 expect val fileSystem: FileSystem
 
 fun readAllText(filePath: String): String =
@@ -37,6 +38,8 @@ data class ExecuteCommandOptions(
     val redirectStderr: Boolean,
     val trim: Boolean
 )
+
+expect suspend fun pwd(options: ExecuteCommandOptions): String
 
 // call $ which $executable on the JVM
 expect suspend fun findExecutable(executable: String): String

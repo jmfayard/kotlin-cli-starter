@@ -46,5 +46,9 @@ actual suspend fun executeCommandAndCaptureOutput(
     return if (options.trim) stdout.trim() else stdout
 }
 
+actual suspend fun pwd(options: ExecuteCommandOptions): String {
+    return executeCommandAndCaptureOutput(listOf("pwd"), options).trim()
+}
+
 actual fun runTest(block: suspend () -> Unit) =
     runBlocking { block() }
