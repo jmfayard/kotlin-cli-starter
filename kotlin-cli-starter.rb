@@ -12,20 +12,22 @@ class KotlinCliStarter < Formula
   depends_on "gradle" => :build
   depends_on "openjdk" => :build
 
-  conflicts_with "git-standup", because: "it's a reimplementation of this tool"
+  conflicts_with "git-standup", because: "both install `git-standup` binaries"
 
   def install
-    system "git", "init", "."
-    system "git", "config", "--global", "user.name", "Git User"
     system "./gradlew", "macosX64Test", "linkReleaseExecutableMacosX64"
+    bin.install "build/bin/macosX64/releaseExecutable/kotlin-cli-starter.kexe" => "git-standup"
     bash_completion.install "completions/git-standup.bash" => "git-standup"
     fish_completion.install "completions/git-standup.fish"
     zsh_completion.install "completions/_git_standup.zsh" => "_git_standup"
-    bin.install "build/bin/macosX64/releaseExecutable/kotlin-cli-starter.kexe" => "git-standup"
   end
 
   test do
-    system "git", "config", "--global", "user.name", "Git User"
-    system "#{bin}/git-standup", "--help"
+    system "git", "init"
+    testpath/"test").write "test"
+    system "git", "add", "#{testpath}/test"
+    system "git", "commit", "--message", "test"
+    system "git", "config", "--global", "user.name", "tap.user"
+    system "#{bin}/git-standup", "--days", "3"
   end
 end
