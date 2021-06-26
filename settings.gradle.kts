@@ -8,6 +8,7 @@ pluginManagement {
 plugins {
     id("com.gradle.enterprise") version "3.6.2"
     id("de.fayard.refreshVersions") version "0.10.0"
+    id("com.louiscad.complete-kotlin") version "1.0.0"
 }
 
 // https://dev.to/jmfayard/the-one-gradle-trick-that-supersedes-all-the-others-5bpg
