@@ -37,7 +37,6 @@ suspend fun runGitStandup(args: Array<String>) {
         Platform.WINDOWS -> "$pwd\\git-standup-report.txt"
         else -> "$pwd/git-standup-report.txt"
     }
-    println("reportFile ${command.reportFile}")
     if (command.report) {
         println("Generating ${command.reportFile}")
         fileSystem.delete(command.reportFile.toPath())
@@ -72,7 +71,6 @@ suspend fun runGitStandup(args: Array<String>) {
 
 
 suspend fun findCommitsInRepo(repositoryPath: String, command: CliCommand) {
-    println("appending sink: ${command.reportFile}")
     val write: BufferedSink = fileSystem.appendingSink(command.reportFile.toPath()).buffer()
     fun log(message: String) {
         when {
