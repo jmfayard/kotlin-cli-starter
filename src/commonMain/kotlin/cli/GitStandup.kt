@@ -23,7 +23,12 @@ suspend fun runGitStandup(args: Array<String>) {
     }
     GIT = findExecutable(GIT)
     FIND = findExecutable(FIND)
-    CURRENT_GIT_USER = executeCommandAndCaptureOutput(listOf(GIT, "config", "user.name"), options)
+    CURRENT_GIT_USER = try {
+        executeCommandAndCaptureOutput(listOf(GIT, "config", "user.name"), options)
+    } catch (e: Exception) {
+        println("Command 'git config user.name' failed with error $e")
+        "me"
+    }
     val command = CliCommand()
     val currentDirectory = pwd(options)
 
