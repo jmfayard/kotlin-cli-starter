@@ -5,13 +5,8 @@ import okio.ExperimentalFileSystem
 import okio.FileSystem
 import okio.Path.Companion.toPath
 
-/***
- * If you need to access platform-specific APIs from the shared code,
- * use the Kotlin mechanism of expected and actual declarations.
- *
- * https://kotlinlang.org/docs/mpp-connect-to-apis.html
- */
-
+expect val platform: Platform
+expect val compilationTarget: CompilationTarget
 expect val fileSystem: FileSystem
 
 fun readAllText(filePath: String): String =
@@ -43,6 +38,8 @@ data class ExecuteCommandOptions(
     val redirectStderr: Boolean,
     val trim: Boolean
 )
+
+expect suspend fun pwd(options: ExecuteCommandOptions): String
 
 // call $ which $executable on the JVM
 expect suspend fun findExecutable(executable: String): String

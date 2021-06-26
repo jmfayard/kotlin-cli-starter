@@ -15,17 +15,22 @@ import okio.buffer
 suspend fun runGitStandup(args: Array<String>) {
     var options = ExecuteCommandOptions(directory = ".", abortOnError = true, redirectStderr = true, trim = true)
 
+    //TODO: move section into nodejs actual code ?
     val jsPackage = "/build/js/packages/kotlin-cli-starter"
-    val pwd = executeCommandAndCaptureOutput(listOf("pwd"), options)
+    val pwd = pwd(options)
     if (pwd.contains(jsPackage)) {
         options = options.copy(directory = pwd.removeSuffix(jsPackage))
     }
     GIT = findExecutable(GIT)
     FIND = findExecutable(FIND)
-    CURRENT_GIT_USER = executeCommandAndCaptureOutput(listOf(GIT, "config", "user.name"), options)
+    CURRENT_GIT_USER = try {
+        executeCommandAndCaptureOutput(listOf(GIT, "config", "user.name"), options)
+    } catch (e: Exception) {
+        println("Command 'git config user.name' failed with error $e")
+        "me"
+    }
     val command = CliCommand()
-
-    val currentDirectory = executeCommandAndCaptureOutput(listOf("pwd"), options).trim()
+    val currentDirectory = pwd(options)
 
     command.main(args)
 
@@ -33,17 +38,33 @@ suspend fun runGitStandup(args: Array<String>) {
         println(command.getFormattedHelp())
         return
     }
-    command.reportFile = "$pwd/git-standup-report.txt"
+    command.reportFile = when(platform) {
+        Platform.WINDOWS -> "$pwd\\git-standup-report.txt"
+        else -> "$pwd/git-standup-report.txt"
+    }
     if (command.report) {
         println("Generating ${command.reportFile}")
         fileSystem.delete(command.reportFile.toPath())
     }
 
-    val gitRepositories =
-        executeCommandAndCaptureOutput(
+    val gitRepositories = when(platform) {
+        Platform.WINDOWS -> {
+            executeCommandAndCaptureOutput(
+                listOf("where", "-r", ".", "HEAD"),
+                options.copy(abortOnError = false, directory = currentDirectory)
+            )
+                .lines()
+                .filter { it.endsWith(".git\\HEAD") }
+                .joinToString("\n") {
+                it.substringBeforeLast("\\HEAD")
+            }
+        }
+        else -> executeCommandAndCaptureOutput(
             command.findCommand(),
             options.copy(abortOnError = false, directory = currentDirectory)
         )
+    }
+
     gitRepositories.lines().filter { it.contains(".git") }.forEach { path ->
         val repositoryPath = when {
             path.startsWith("./") -> "$currentDirectory/" + path.removePrefix("./")
@@ -56,9 +77,13 @@ suspend fun runGitStandup(args: Array<String>) {
 
 suspend fun findCommitsInRepo(repositoryPath: String, command: CliCommand) {
     val write: BufferedSink = fileSystem.appendingSink(command.reportFile.toPath()).buffer()
-    fun log(message: String) = when {
-        command.report -> write.writeUtf8("$message\n")
-        else -> println(message)
+    fun log(message: String) {
+        when {
+            command.report -> {
+                write.writeUtf8("$message\n")
+            }
+            else -> println(message)
+        }
     }
 
     val options =

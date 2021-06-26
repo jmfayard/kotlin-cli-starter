@@ -14,7 +14,7 @@ jobs:
   gradle:
     strategy:
       matrix:
-        #os:  [ubuntu-latest, macos-latest, windows-latest]
+        #os:  [windows-latest, macos-latest, ubuntu-latest]
         os:  [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -31,6 +31,7 @@ jobs:
       # Execute Gradle commands in GitHub Actions workflows
       # => https://github.com/marketplace/actions/gradle-command
       - id: gradle
+        name: ./gradlew runOnGitHub
         uses: eskatos/gradle-command-action@v1
         with:
           arguments: runOnGitHub
