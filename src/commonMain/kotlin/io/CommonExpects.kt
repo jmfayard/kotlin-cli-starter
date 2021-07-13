@@ -27,6 +27,10 @@ fun writeAllLines(
 fun fileIsReadable(filePath: String): Boolean =
     fileSystem.exists(filePath.toPath())
 
+expect suspend fun executeCommandAndCaptureOutput(
+    command: List<String>,
+    options: ExecuteCommandOptions
+): String
 
 data class ExecuteCommandOptions(
     val directory: String,
