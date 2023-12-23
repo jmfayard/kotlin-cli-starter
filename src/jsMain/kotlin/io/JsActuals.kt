@@ -1,12 +1,9 @@
-@file:OptIn(ExperimentalFileSystem::class)
-
 package io
 
 import path.path
 import child_process.ExecOptions
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
-import okio.ExperimentalFileSystem
 import okio.FileSystem
 import okio.NodeJsFileSystem
 import kotlin.coroutines.resume

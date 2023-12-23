@@ -1,12 +1,8 @@
-@file:OptIn(ExperimentalFileSystem::class)
-
 package io
 
 import kotlinx.cinterop.refTo
 import kotlinx.cinterop.toKString
 import kotlinx.coroutines.runBlocking
-import okio.ExperimentalFileSystem
-import okio.FileSystem
 import platform.posix.chdir
 import platform.posix.fgets
 import platform.posix.pclose

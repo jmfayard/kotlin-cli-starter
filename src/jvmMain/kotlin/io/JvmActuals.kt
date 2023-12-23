@@ -1,11 +1,9 @@
 package io
 
 import kotlinx.coroutines.runBlocking
-import okio.ExperimentalFileSystem
 import okio.FileSystem
 import java.io.File
 
-@OptIn(ExperimentalFileSystem::class)
 actual val fileSystem: FileSystem = FileSystem.SYSTEM
 
 actual suspend fun executeCommandAndCaptureOutput(

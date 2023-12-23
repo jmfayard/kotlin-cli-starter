@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalFileSystem::class)
-
 package io
 
 import kotlinx.cinterop.refTo
@@ -48,7 +46,7 @@ actual suspend fun executeCommandAndCaptureOutput(
 }
 
 actual suspend fun pwd(options: ExecuteCommandOptions): String {
-    return when(platform) {
+    return when (platform) {
         Platform.WINDOWS -> executeCommandAndCaptureOutput(listOf("echo", "%cd%"), options).trim('"', ' ')
         else -> executeCommandAndCaptureOutput(listOf("pwd"), options).trim()
     }

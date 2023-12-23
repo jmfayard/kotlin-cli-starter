@@ -64,7 +64,7 @@ kotlin {
             dependencies {
                 implementation("com.github.ajalt.clikt:clikt:_")
                 implementation("com.github.ajalt.mordant:mordant:_")
-                implementation("com.squareup.okio:okio-multiplatform:_")
+                implementation("com.squareup.okio:okio:_")
                 implementation(KotlinX.coroutines.core)
 
                 /// implementation(Ktor.client.core)
@@ -77,6 +77,7 @@ kotlin {
             dependencies {
                 implementation(Kotlin.test.common)
                 implementation(Kotlin.test.annotationsCommon)
+                implementation("com.squareup.okio:okio-fakefilesystem:_")
             }
         }
         getByName("jvmMain") {
@@ -118,7 +119,7 @@ kotlin {
         }
         getByName("jsMain") {
             dependencies {
-                implementation("com.squareup.okio:okio-nodefilesystem-js:_")
+                implementation("com.squareup.okio:okio-nodefilesystem:_")
                 implementation(KotlinX.nodeJs)
             }
         }
@@ -133,7 +134,6 @@ kotlin {
         sourceSets.all {
             languageSettings.apply {
                 optIn("kotlin.RequiresOptIn")
-                optIn("okio.ExperimentalFileSystem")
             }
         }
     }

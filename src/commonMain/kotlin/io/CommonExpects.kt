@@ -1,7 +1,5 @@
-@file:OptIn(ExperimentalFileSystem::class)
 package io
 
-import okio.ExperimentalFileSystem
 import okio.FileSystem
 import okio.Path.Companion.toPath
 
