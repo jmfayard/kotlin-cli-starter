@@ -12,8 +12,7 @@ plugins {
 group = "cli"
 version = "0.2.0"
 
-// CUSTOMIZE_ME: the name of your command-line tool goes here
-val PROGRAM = "git-standup"
+val PROGRAM = "kobs"
 
 repositories {
     mavenCentral()

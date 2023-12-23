@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+let program = require("./kotlin-cli-starter.js")
+
+process.argv.shift()
+process.argv.shift()
+program.cli.runObsidian(process.argv)

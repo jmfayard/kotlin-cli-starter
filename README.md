@@ -114,23 +114,6 @@ Options:
 Examples: git-standup -a "John Doe" -w "MON-FRI" -m 3
 ```
 
-## CUSTOMIZE_ME
-
-So are you ready to write your own command-line tool?
-
-Have you an idea of what you want to write yet?
-
-You can find some inspiration in [15 Command Line Tools which Spark Joy in Your Terminal ](https://dev.to/jmfayard/15-command-line-tools-which-spark-joy-in-your-terminal-45ln)
-
-Then click on [Use this GitHub template](https://github.com/jmfayard/kotlin-cli-starter/generate)
-
-<img width="1214"  src="https://user-images.githubusercontent.com/459464/117193054-b40e9200-ade2-11eb-86a8-ad65a45a82da.png">
-
-There are comments starting with [**CUSTOMIZE_ME**](https://github.com/jmfayard/kotlin-cli-starter/search?q=CUSTOMIZE_ME) in all places you need to customize
-
-Find them with `Edit > File > Find in Files`
-
-<img width="998" src="https://user-images.githubusercontent.com/459464/117405450-f253a080-af0b-11eb-882c-7bae969bc7e2.png">
 
 ## Built with kotlin-cli-starter
 

@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-## CUSTOMIZE_ME: use your own GitHub username and repository here
 USER=jmfayard
-REPO=kotlin-cli-starter
+REPO=kotlin-obsidian
 ## Clone the repo
 git clone https://github.com/$USER/$REPO.git --depth=1 || {
   echo >&2 "Clone failed with $?"
