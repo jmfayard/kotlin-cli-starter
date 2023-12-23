@@ -17,12 +17,12 @@ val PROGRAM = "git-standup"
 
 repositories {
     mavenCentral()
-    jcenter()
+    jcenter() // https://github.com/Kotlin/kotlinx-nodejs
 }
 
 dependencies {
-    testImplementation(Testing.junit.params)
-    testRuntimeOnly(Testing.junit.engine)
+    testImplementation(Testing.junit.jupiter.params)
+    testRuntimeOnly(Testing.junit.jupiter.engine)
 }
 
 application {
@@ -48,14 +48,16 @@ kotlin {
 
     val jvmTarget = jvm()
 
-    val node = js(LEGACY) {
+    js(IR) {
         nodejs()
         binaries.executable()
     }
 
     sourceSets {
         all {
-            languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+            languageSettings.apply {
+                optIn("kotlin.RequiresOptIn")
+            }
         }
 
         val commonMain by getting {
@@ -86,8 +88,8 @@ kotlin {
         }
         getByName("jvmTest") {
             dependencies {
-                implementation(Testing.junit.api)
-                implementation(Testing.junit.engine)
+                implementation(Testing.junit.jupiter.api)
+                implementation(Testing.junit.jupiter.engine)
                 implementation(Kotlin.test.junit5)
             }
         }
@@ -128,10 +130,10 @@ kotlin {
             }
         }
 
-        sourceSets {
-            all {
-                languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
-                languageSettings.useExperimentalAnnotation("okio.ExperimentalFileSystem")
+        sourceSets.all {
+            languageSettings.apply {
+                optIn("kotlin.RequiresOptIn")
+                optIn("okio.ExperimentalFileSystem")
             }
         }
     }
@@ -153,8 +155,8 @@ kotlin {
 
         from(jvmTarget.compilations.getByName("main").output)
         configurations = mutableListOf(
-            jvmTarget.compilations.getByName("main").compileDependencyFiles as Configuration,
-            jvmTarget.compilations.getByName("main").runtimeDependencyFiles as Configuration
+            jvmTarget.compilations.getByName("main").compileDependencyFiles,
+            jvmTarget.compilations.getByName("main").runtimeDependencyFiles
         )
     }
 }
