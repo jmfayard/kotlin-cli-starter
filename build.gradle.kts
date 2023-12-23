@@ -42,7 +42,6 @@ fun KotlinNativeTargetWithHostTests.configureTarget() =
     binaries { executable { entryPoint = "main" } }
 
 kotlin {
-
     macosX64 { configureTarget() }
     mingwX64 { configureTarget() }
     linuxX64 { configureTarget() }
@@ -118,6 +117,7 @@ kotlin {
         arrayOf("macosX64", "linuxX64", "mingwX64").forEach { targetName ->
             getByName("${targetName}Main").dependsOn(nativeMain)
             getByName("${targetName}Test").dependsOn(nativeTest)
+
         }
         getByName("jsMain") {
             dependencies {
