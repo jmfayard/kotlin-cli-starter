@@ -17,6 +17,7 @@ val PROGRAM = "git-standup"
 
 repositories {
     mavenCentral()
+    @Suppress("DEPRECATION")
     jcenter() // https://github.com/Kotlin/kotlinx-nodejs
 }
 
@@ -57,6 +58,7 @@ kotlin {
         all {
             languageSettings.apply {
                 optIn("kotlin.RequiresOptIn")
+                optIn("kotlinx.cinterop.ExperimentalForeignApi")
             }
         }
 
@@ -131,11 +133,6 @@ kotlin {
             }
         }
 
-        sourceSets.all {
-            languageSettings.apply {
-                optIn("kotlin.RequiresOptIn")
-            }
-        }
     }
 
     tasks.withType<JavaExec> {

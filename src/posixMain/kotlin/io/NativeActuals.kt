@@ -1,5 +1,6 @@
 package io
 
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.refTo
 import kotlinx.cinterop.toKString
 import kotlinx.coroutines.runBlocking
@@ -14,6 +15,7 @@ actual suspend fun findExecutable(executable: String): String =
 /**
  * https://stackoverflow.com/questions/57123836/kotlin-native-execute-command-and-get-the-output
  */
+@OptIn(ExperimentalForeignApi::class)
 actual suspend fun executeCommandAndCaptureOutput(
     command: List<String>, // "find . -name .git"
     options: ExecuteCommandOptions
