@@ -136,6 +136,7 @@ Find them with `Edit > File > Find in Files`
 
 - [git-standup](https://github.com/jmfayard/kotlin-cli-starter)
 - [httpie.kt](https://github.com/raychenon/httpie.kt)
+- [vuldra](https://github.com/vuldra/vuldra)
 - ...
 
 _Have you used the template to build something? Please advertise it here_ 🙏🏻 
